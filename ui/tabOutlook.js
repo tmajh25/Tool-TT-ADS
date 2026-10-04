@@ -126,21 +126,21 @@ class TabOutlook {
             const displayName = acc.note ? `<span class="text-blue-400 font-semibold mr-1.5">[${acc.note}]</span><span class="text-slate-200">${acc.user_tt}</span>` : `<span class="text-slate-200 font-semibold">${acc.user_tt}</span>`;
 
             item.innerHTML = `
-                <div class="flex items-center justify-between w-full">
-                    <div class="truncate text-xs tracking-wide flex-1 mr-2 account-display-name">
-                        <span class="text-slate-400 font-mono mr-1.5">${originalIndex + 1}.</span>
+                <div class="flex items-center justify-between w-full min-w-0">
+                    <div class="truncate text-xs tracking-wide flex-1 mr-1.5 min-w-0 account-display-name">
+                        <span class="text-slate-400 font-mono mr-1">${originalIndex + 1}.</span>
                         ${displayName}
                         <span class="text-[10px] text-slate-500 ml-1">(${acc.type ? acc.type.toUpperCase() : 'BASIC'})</span>
                     </div>
                     <div class="flex items-center space-x-1 flex-shrink-0">
                         ${badgeHtml}
                         <button onclick="event.stopPropagation(); window.tabOutlook.openEditModal(${originalIndex})" 
-                                class="text-slate-400 hover:text-blue-400 p-1 rounded transition-colors duration-150" title="Sửa tài khoản này">
-                            <i class="fa-solid fa-pen-to-square text-[10px]"></i>
+                                class="text-slate-400 hover:text-blue-400 px-1.5 py-0.5 text-[11px] font-medium rounded bg-slate-800/40 hover:bg-slate-800 transition-colors flex-shrink-0" title="Sửa tài khoản">
+                            Sửa
                         </button>
                         <button onclick="event.stopPropagation(); window.tabOutlook.deleteAccount(${originalIndex})" 
-                                class="text-slate-400 hover:text-rose-500 p-1 rounded transition-colors duration-150" title="Xóa tài khoản này">
-                            <i class="fa-solid fa-trash-can text-[10px]"></i>
+                                class="text-slate-400 hover:text-rose-400 px-1.5 py-0.5 text-[11px] font-medium rounded bg-slate-800/40 hover:bg-slate-800 transition-colors flex-shrink-0" title="Xóa tài khoản">
+                            Xóa
                         </button>
                     </div>
                 </div>

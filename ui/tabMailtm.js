@@ -108,20 +108,20 @@ class TabMailtm {
             const displayName = acc.note ? `<span class="text-blue-400 font-semibold mr-1.5">[${acc.note}]</span><span class="text-slate-200">${acc.email}</span>` : `<span class="text-slate-200 font-semibold">${acc.email}</span>`;
 
             item.innerHTML = `
-                <div class="flex items-center justify-between w-full">
-                    <div class="truncate text-xs tracking-wide flex-1 mr-2 account-display-name">
-                        <span class="text-slate-400 font-mono mr-1.5">${index + 1}.</span>
+                <div class="flex items-center justify-between w-full min-w-0">
+                    <div class="truncate text-xs tracking-wide flex-1 mr-1.5 min-w-0 account-display-name">
+                        <span class="text-slate-400 font-mono mr-1">${index + 1}.</span>
                         ${displayName}
                     </div>
                     <div class="flex items-center space-x-1 flex-shrink-0">
                         ${badgeHtml}
                         <button onclick="event.stopPropagation(); window.tabMailtm.openEditModal(${index})" 
-                                class="text-slate-400 hover:text-blue-400 p-1 rounded transition-colors duration-150" title="Sửa tài khoản này">
-                            <i class="fa-solid fa-pen-to-square text-[10px]"></i>
+                                class="text-slate-400 hover:text-blue-400 px-1.5 py-0.5 text-[11px] font-medium rounded bg-slate-800/40 hover:bg-slate-800 transition-colors flex-shrink-0" title="Sửa tài khoản">
+                            Sửa
                         </button>
                         <button onclick="event.stopPropagation(); window.tabMailtm.deleteAccount(${index})" 
-                                class="text-slate-400 hover:text-rose-500 p-1 rounded transition-colors duration-150" title="Xóa tài khoản này">
-                            <i class="fa-solid fa-trash-can text-[10px]"></i>
+                                class="text-slate-400 hover:text-rose-400 px-1.5 py-0.5 text-[11px] font-medium rounded bg-slate-800/40 hover:bg-slate-800 transition-colors flex-shrink-0" title="Xóa tài khoản">
+                            Xóa
                         </button>
                     </div>
                 </div>

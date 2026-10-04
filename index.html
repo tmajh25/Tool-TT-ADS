@@ -320,20 +320,20 @@
         </div>
 
         <!-- TABS SWITCHER -->
-        <div class="flex bg-slate-900/60 p-0.5 rounded-lg border border-cyber-border/40 backdrop-blur-sm shadow-inner">
-            <button id="btn-tab-mailtm" onclick="switchTab('mailtm')" class="flex items-center px-4 py-1.5 rounded-md text-xs font-semibold tracking-wider transition-all duration-200 bg-blue-600 text-white shadow-sm">
+        <div class="flex bg-slate-900/60 p-0.5 rounded-lg border border-cyber-border/40 backdrop-blur-sm shadow-inner flex-shrink-0">
+            <button id="btn-tab-mailtm" onclick="switchTab('mailtm')" class="flex items-center px-4 py-1.5 rounded-md text-xs font-semibold tracking-wider transition-all duration-200 bg-blue-600 text-white shadow-sm whitespace-nowrap">
                 <span>MAIL.TM</span>
             </button>
-            <button id="btn-tab-outlook" onclick="switchTab('outlook')" class="flex items-center px-4 py-1.5 rounded-md text-xs font-semibold tracking-wider transition-all duration-200 text-slate-400 hover:text-white">
+            <button id="btn-tab-outlook" onclick="switchTab('outlook')" class="flex items-center px-4 py-1.5 rounded-md text-xs font-semibold tracking-wider transition-all duration-200 text-slate-400 hover:text-white whitespace-nowrap">
                 <span>OUTLOOK</span>
             </button>
-            <button id="btn-tab-reg" onclick="switchTab('reg')" class="flex items-center px-4 py-1.5 rounded-md text-xs font-semibold tracking-wider transition-all duration-200 text-slate-400 hover:text-white">
+            <button id="btn-tab-reg" onclick="switchTab('reg')" class="flex items-center px-4 py-1.5 rounded-md text-xs font-semibold tracking-wider transition-all duration-200 text-slate-400 hover:text-white whitespace-nowrap">
                 <span>REG TK</span>
             </button>
-            <button id="btn-tab-settings" onclick="switchTab('settings')" class="flex items-center px-4 py-1.5 rounded-md text-xs font-semibold tracking-wider transition-all duration-200 text-slate-400 hover:text-white">
+            <button id="btn-tab-settings" onclick="switchTab('settings')" class="flex items-center px-4 py-1.5 rounded-md text-xs font-semibold tracking-wider transition-all duration-200 text-slate-400 hover:text-white whitespace-nowrap">
                 <span>CÀI ĐẶT</span>
             </button>
-            <button id="btn-tab-mobile" onclick="switchTab('mobile')" class="flex items-center px-4 py-1.5 rounded-md text-xs font-semibold tracking-wider transition-all duration-200 text-cyan-400 hover:text-white">
+            <button id="btn-tab-mobile" onclick="switchTab('mobile')" class="flex items-center px-4 py-1.5 rounded-md text-xs font-semibold tracking-wider transition-all duration-200 text-cyan-400 hover:text-white whitespace-nowrap">
                 <span>MOBILE APP</span>
             </button>
         </div>
@@ -349,7 +349,7 @@
              ========================================================================= -->
         <div id="tab-content-mailtm" class="w-full h-full flex overflow-hidden">
             <!-- LEFT PANEL: TÀI KHOẢN -->
-            <aside class="w-72 bg-cyber-card border-r border-cyber-border flex flex-col h-full flex-shrink-0">
+            <aside class="w-80 bg-cyber-card border-r border-cyber-border flex flex-col h-full flex-shrink-0">
                 <div class="p-3 border-b border-cyber-border">
                     <h2 class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Quản lý Tài khoản</h2>
                     
@@ -357,8 +357,8 @@
                     <div class="mb-2">
                         <div class="flex space-x-1.5">
                             <input id="mailtm-quick-paste" type="text" placeholder="Dán Mail|Pass|2FA..." 
-                                   class="flex-1 text-xs bg-cyber-bg border border-cyber-border text-blue-400 placeholder-slate-500 rounded px-2.5 py-1.5 focus:outline-none focus:border-blue-500 transition">
-                            <button onclick="window.tabMailtm.mailtmManualLogin()" class="bg-slate-800 hover:bg-slate-700 text-[11px] text-white font-semibold px-3 py-1.5 rounded transition flex-shrink-0">
+                                   class="flex-1 min-w-0 text-xs bg-cyber-bg border border-cyber-border text-blue-400 placeholder-slate-500 rounded px-2.5 py-1.5 focus:outline-none focus:border-blue-500 transition">
+                            <button onclick="window.tabMailtm.mailtmManualLogin()" class="bg-slate-800 hover:bg-slate-700 text-[11px] text-white font-semibold px-2.5 py-1.5 rounded transition flex-shrink-0 whitespace-nowrap">
                                 <span>ĐĂNG NHẬP</span>
                             </button>
                         </div>
@@ -366,10 +366,10 @@
 
                     <!-- Nút Nhập File & Check -->
                     <div class="flex space-x-1.5">
-                        <button onclick="window.tabMailtm.mailtmOpenFile()" class="flex-1 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 text-blue-400 text-xs font-semibold py-1.5 px-2 rounded transition flex items-center justify-center">
+                        <button onclick="window.tabMailtm.mailtmOpenFile()" class="flex-1 min-w-0 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 text-blue-400 text-xs font-semibold py-1.5 px-2 rounded transition flex items-center justify-center whitespace-nowrap">
                             <span>CHỌN FILE</span>
                         </button>
-                        <button onclick="window.tabMailtm.mailtmCheckLive()" class="bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 text-blue-400 text-xs font-semibold py-1.5 px-3 rounded transition flex items-center justify-center">
+                        <button onclick="window.tabMailtm.mailtmCheckLive()" class="flex-1 min-w-0 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 text-blue-400 text-xs font-semibold py-1.5 px-2 rounded transition flex items-center justify-center whitespace-nowrap">
                             <span>CHECK KHÁNG</span>
                         </button>
                     </div>
@@ -388,7 +388,7 @@
             </aside>
 
             <!-- RIGHT PANEL: CHI TIẾT & HỘP THƯ -->
-            <section class="flex-1 flex flex-col h-full bg-cyber-bg overflow-hidden p-2.5">
+            <section class="flex-1 flex flex-col h-full bg-cyber-bg overflow-hidden p-2.5 min-w-0">
                 <!-- KHUNG THÔNG TIN ACC (4 CỘT RÕ RÀNG, ĐÃ BỎ GHI CHÚ) -->
                 <div class="bg-cyber-card border border-cyber-border rounded-lg p-2.5 mb-2 shadow-sm flex-shrink-0">
                     <div class="grid grid-cols-4 gap-2.5 mb-2">
@@ -410,8 +410,8 @@
                         <div>
                             <div class="flex items-center justify-between mb-0.5">
                                 <label class="block text-[10px] font-bold text-red-400 uppercase">Mã 2FA</label>
-                                <button onclick="mailtmRefresh2FA()" class="text-[10px] text-slate-400 hover:text-white transition" title="Lấy mã 2FA mới">
-                                    <i class="fa-solid fa-rotate-right"></i>
+                                <button onclick="mailtmRefresh2FA()" class="text-[10px] text-slate-400 hover:text-white transition font-medium" title="Lấy mã 2FA mới">
+                                    <span>Lấy lại mã</span>
                                 </button>
                             </div>
                             <input id="mailtm-info-2fa" readonly type="text" value="..." onclick="copyField(this, '2FA Code')" title="Click để copy Mã 2FA"
@@ -420,17 +420,16 @@
                     </div>
 
                     <!-- Hàng Action: Sửa TK, Đăng nhập & Bypass Smart+ -->
-                    <div class="flex items-center space-x-2 pt-1 border-t border-cyber-border/40">
+                    <div class="flex items-center flex-wrap gap-2 pt-1.5 border-t border-cyber-border/40">
                         <button onclick="window.tabMailtm.openEditModal()" 
-                                class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-cyber-border text-xs font-semibold py-1.5 px-3 rounded transition flex items-center space-x-1.5 flex-shrink-0" title="Chỉnh sửa tài khoản">
-                            <i class="fa-solid fa-pen-to-square text-[11px] text-blue-400"></i>
+                                class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-cyber-border text-xs font-semibold py-1.5 px-3 rounded transition flex-shrink-0 whitespace-nowrap" title="Chỉnh sửa tài khoản">
                             <span>SỬA TÀI KHOẢN</span>
                         </button>
                         <button onclick="window.tabMailtm.mailtmRunSelenium()" 
-                                class="flex-1 bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white tracking-wider py-1.5 px-3 rounded transition shadow-sm flex items-center justify-center">
+                                class="flex-1 min-w-[200px] bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white tracking-wider py-1.5 px-3 rounded transition shadow-sm flex items-center justify-center whitespace-nowrap">
                             <span>ĐĂNG NHẬP VÀO TIKTOK ADS</span>
                         </button>
-                        <div class="flex items-center space-x-1.5 px-2.5 py-1 bg-cyber-bg border border-cyber-border rounded flex-shrink-0">
+                        <div class="flex items-center space-x-1.5 px-2.5 py-1 bg-cyber-bg border border-cyber-border rounded flex-shrink-0 whitespace-nowrap">
                             <span class="text-[11px] font-semibold text-slate-300">Bypass Smart+</span>
                             <button id="mailtm-btn-smartplus" onclick="window.tabMailtm.toggleSmartPlus()" 
                                     class="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider transition border bg-emerald-500/20 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/30">
@@ -441,9 +440,9 @@
                 </div>
 
                 <!-- VÙNG HỘP THƯ & TRÌNH ĐỌC (RỘNG RÃI, KHÔNG BỊ ÉP) -->
-                <div class="flex-1 flex space-x-2.5 overflow-hidden">
+                <div class="flex-1 flex space-x-2.5 overflow-hidden min-h-0">
                     <!-- HỘP THƯ ĐẾN -->
-                    <div class="w-[320px] max-w-[40%] bg-cyber-card border border-cyber-border rounded-lg flex flex-col overflow-hidden flex-shrink-0 shadow-sm">
+                    <div class="w-80 max-w-[40%] min-w-[240px] bg-cyber-card border border-cyber-border rounded-lg flex flex-col overflow-hidden flex-shrink-0 shadow-sm">
                         <div class="px-3 py-1.5 border-b border-cyber-border flex items-center justify-between">
                             <h3 class="text-xs font-bold text-white uppercase tracking-wider">Hộp Thư Đến</h3>
                             <button onclick="window.tabMailtm.mailtmRefreshInbox()" class="text-[10px] bg-slate-800 hover:bg-slate-700 px-2.5 py-0.5 rounded border border-cyber-border text-slate-300 font-medium transition-colors">
@@ -479,7 +478,7 @@
              ========================================================================= -->
         <div id="tab-content-outlook" class="w-full h-full flex overflow-hidden hidden">
             <!-- LEFT PANEL: TÀI KHOẢN -->
-            <aside class="w-72 bg-cyber-card border-r border-cyber-border flex flex-col h-full flex-shrink-0">
+            <aside class="w-80 bg-cyber-card border-r border-cyber-border flex flex-col h-full flex-shrink-0">
                 <div class="p-3 border-b border-cyber-border">
                     <h2 class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Quản lý List Outlook</h2>
                     
@@ -487,8 +486,8 @@
                     <div class="mb-2">
                         <div class="flex space-x-1.5">
                             <input id="outlook-quick-paste" type="text" placeholder="Dán định dạng Account..." 
-                                   class="flex-1 text-xs bg-cyber-bg border border-cyber-border text-blue-400 placeholder-slate-500 rounded px-2.5 py-1.5 focus:outline-none focus:border-blue-500 transition">
-                            <button onclick="window.tabOutlook.outlookAddAccount()" class="bg-slate-800 hover:bg-slate-700 text-[11px] text-white font-semibold px-2.5 py-1.5 rounded transition flex-shrink-0">
+                                   class="flex-1 min-w-0 text-xs bg-cyber-bg border border-cyber-border text-blue-400 placeholder-slate-500 rounded px-2.5 py-1.5 focus:outline-none focus:border-blue-500 transition">
+                            <button onclick="window.tabOutlook.outlookAddAccount()" class="bg-slate-800 hover:bg-slate-700 text-[11px] text-white font-semibold px-2.5 py-1.5 rounded transition flex-shrink-0 whitespace-nowrap">
                                 <span>THÊM</span>
                             </button>
                         </div>
@@ -496,10 +495,10 @@
 
                     <!-- Nút Nhập File & Xóa -->
                     <div class="flex space-x-1.5">
-                        <button onclick="window.tabOutlook.outlookOpenFile()" class="flex-1 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 text-blue-400 text-xs font-semibold py-1.5 px-2 rounded transition flex items-center justify-center">
+                        <button onclick="window.tabOutlook.outlookOpenFile()" class="flex-1 min-w-0 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 text-blue-400 text-xs font-semibold py-1.5 px-2 rounded transition flex items-center justify-center whitespace-nowrap">
                             <span>NHẬP FILE</span>
                         </button>
-                        <button onclick="window.tabOutlook.outlookClearAll()" class="bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-400 text-xs font-semibold py-1.5 px-3 rounded transition flex items-center justify-center">
+                        <button onclick="window.tabOutlook.outlookClearAll()" class="flex-1 min-w-0 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-400 text-xs font-semibold py-1.5 px-2 rounded transition flex items-center justify-center whitespace-nowrap">
                             <span>XÓA LIST</span>
                         </button>
                     </div>
@@ -517,7 +516,7 @@
             </aside>
 
             <!-- RIGHT PANEL: CHI TIẾT & HỘP THƯ -->
-            <section class="flex-1 flex flex-col h-full bg-cyber-bg overflow-hidden p-2.5">
+            <section class="flex-1 flex flex-col h-full bg-cyber-bg overflow-hidden p-2.5 min-w-0">
                 <!-- KHUNG THÔNG TIN ACC (4 CỘT RÕ RÀNG, ĐÃ BỎ GHI CHÚ) -->
                 <div class="bg-cyber-card border border-cyber-border rounded-lg p-2.5 mb-2 shadow-sm flex-shrink-0">
                     <div class="grid grid-cols-4 gap-2.5 mb-2">
@@ -544,17 +543,16 @@
                     </div>
 
                     <!-- Hàng Action: Sửa TK, Đăng nhập & Bypass Smart+ -->
-                    <div class="flex items-center space-x-2 pt-1 border-t border-cyber-border/40">
+                    <div class="flex items-center flex-wrap gap-2 pt-1.5 border-t border-cyber-border/40">
                         <button onclick="window.tabOutlook.openEditModal()" 
-                                class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-cyber-border text-xs font-semibold py-1.5 px-3 rounded transition flex items-center space-x-1.5 flex-shrink-0" title="Chỉnh sửa tài khoản">
-                            <i class="fa-solid fa-pen-to-square text-[11px] text-blue-400"></i>
+                                class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-cyber-border text-xs font-semibold py-1.5 px-3 rounded transition flex-shrink-0 whitespace-nowrap" title="Chỉnh sửa tài khoản">
                             <span>SỬA TÀI KHOẢN</span>
                         </button>
                         <button onclick="window.tabOutlook.outlookRunSelenium()" 
-                                class="flex-1 bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white tracking-wider py-1.5 px-3 rounded transition shadow-sm flex items-center justify-center">
+                                class="flex-1 min-w-[200px] bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white tracking-wider py-1.5 px-3 rounded transition shadow-sm flex items-center justify-center whitespace-nowrap">
                             <span>MỞ TRÌNH DUYỆT ĐĂNG NHẬP</span>
                         </button>
-                        <div class="flex items-center space-x-1.5 px-2.5 py-1 bg-cyber-bg border border-cyber-border rounded flex-shrink-0">
+                        <div class="flex items-center space-x-1.5 px-2.5 py-1 bg-cyber-bg border border-cyber-border rounded flex-shrink-0 whitespace-nowrap">
                             <span class="text-[11px] font-semibold text-slate-300">Bypass Smart+</span>
                             <button id="outlook-btn-smartplus" onclick="window.tabOutlook.toggleSmartPlus()" 
                                     class="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider transition border bg-emerald-500/20 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/30">
@@ -565,9 +563,9 @@
                 </div>
 
                 <!-- VÙNG HỘP THƯ & TRÌNH ĐỌC (RỘNG RÃI, KHÔNG BỊ ÉP) -->
-                <div class="flex-1 flex space-x-2.5 overflow-hidden">
+                <div class="flex-1 flex space-x-2.5 overflow-hidden min-h-0">
                     <!-- HỘP THƯ ĐẾN -->
-                    <div class="w-[320px] max-w-[40%] bg-cyber-card border border-cyber-border rounded-lg flex flex-col overflow-hidden flex-shrink-0 shadow-sm">
+                    <div class="w-80 max-w-[40%] min-w-[240px] bg-cyber-card border border-cyber-border rounded-lg flex flex-col overflow-hidden flex-shrink-0 shadow-sm">
                         <div class="px-3 py-1.5 border-b border-cyber-border flex items-center justify-between">
                             <h3 class="text-xs font-bold text-white uppercase tracking-wider">Hộp Thư Đến</h3>
                             <button onclick="window.tabOutlook.outlookRefreshInbox()" class="text-[10px] bg-slate-800 hover:bg-slate-700 px-2.5 py-0.5 rounded border border-cyber-border text-slate-300 font-medium transition-colors">
@@ -602,7 +600,7 @@
              ========================================================================= -->
         <div id="tab-content-reg" class="w-full h-full flex overflow-hidden hidden">
             <!-- LEFT PANEL: CẤU HÌNH -->
-            <aside class="w-72 bg-cyber-card border-r border-cyber-border flex flex-col h-full flex-shrink-0">
+            <aside class="w-80 bg-cyber-card border-r border-cyber-border flex flex-col h-full flex-shrink-0">
                 <div class="p-3 border-b border-cyber-border">
                     <h2 class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2.5">Cấu hình Reg</h2>
 
@@ -633,11 +631,11 @@
 
                 <div class="p-2.5 flex space-x-2 border-b border-cyber-border">
                     <button id="btn-run-reg" onclick="window.tabReg.startReg()"
-                            class="flex-1 bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white tracking-wider py-1.5 px-3 rounded-lg transition shadow-sm flex items-center justify-center">
+                            class="flex-1 bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white tracking-wider py-1.5 px-3 rounded-lg transition shadow-sm flex items-center justify-center whitespace-nowrap">
                         <span>BẮT ĐẦU REG</span>
                     </button>
                     <button id="btn-stop-reg" onclick="window.tabReg.stopReg()" disabled
-                            class="bg-red-600 hover:bg-red-500 disabled:opacity-40 disabled:cursor-not-allowed text-xs font-bold text-white tracking-wider py-1.5 px-4 rounded-lg transition flex items-center justify-center">
+                            class="bg-red-600 hover:bg-red-500 disabled:opacity-40 disabled:cursor-not-allowed text-xs font-bold text-white tracking-wider py-1.5 px-4 rounded-lg transition flex items-center justify-center whitespace-nowrap">
                         <span>DỪNG</span>
                     </button>
                 </div>
@@ -658,7 +656,7 @@
             </aside>
 
             <!-- RIGHT PANEL: KẾT QUẢ -->
-            <section class="flex-1 flex flex-col h-full bg-cyber-bg overflow-hidden p-3">
+            <section class="flex-1 flex flex-col h-full bg-cyber-bg overflow-hidden p-3 min-w-0">
                 <div class="bg-cyber-card border border-cyber-border rounded-lg flex flex-col flex-1 overflow-hidden shadow-sm">
                     <div class="px-3 py-1.5 border-b border-cyber-border flex items-center justify-between">
                         <h3 class="text-xs font-bold text-white uppercase tracking-wider">Kết quả xuất ra (email|password|2fa_secret)</h3>
