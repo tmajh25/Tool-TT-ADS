@@ -292,6 +292,21 @@
         html:not(.dark) #toast #toast-msg {
             color: #0F172A !important;
         }
+
+        /* Unified Top Control Toolbar styling */
+        .toolbar-field {
+            background-color: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--border-color);
+        }
+        html:not(.dark) .toolbar-field {
+            background-color: #FFFFFF !important;
+            border-color: #CBD5E1 !important;
+        }
+        .toolbar-field input {
+            background-color: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
     </style>
     <!-- Axios CDN for API calls in frontend -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -373,62 +388,72 @@
             </aside>
 
             <!-- RIGHT PANEL: CHI TIẾT & HỘP THƯ -->
-            <section class="flex-1 flex flex-col h-full bg-cyber-bg overflow-hidden p-3">
-                <!-- KHUNG THÔNG TIN ACC (INFO BOX GỌN GÀNG) -->
-                <div class="bg-cyber-card border border-cyber-border rounded-lg p-2.5 mb-2.5 shadow-sm">
-                    <div class="grid grid-cols-5 gap-2 mb-2">
-                        <div class="relative">
-                            <label class="block text-[10px] font-bold text-blue-400 uppercase mb-0.5">Ghi chú (Note)</label>
-                            <input id="mailtm-info-note" type="text" placeholder="Đặt ghi chú..."
-                                   class="w-full text-xs font-bold bg-slate-900/50 border border-cyber-border rounded px-2 py-1 text-blue-400 focus:outline-none focus:border-blue-500/50 transition">
-                        </div>
-                        <div class="relative">
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Email</label>
+            <section class="flex-1 flex flex-col h-full bg-cyber-bg overflow-hidden">
+                <!-- TOP CONTROL TOOLBAR (HEIGHT ~40px) -->
+                <div class="bg-cyber-card border-b border-cyber-border px-3 py-1.5 flex items-center justify-between gap-2 flex-shrink-0 shadow-sm z-10">
+                    <!-- Thông tin Acc: Mail, Pass, 2FA, Note -->
+                    <div class="flex items-center gap-1.5 flex-1 min-w-0 overflow-x-auto py-0.5">
+                        <!-- Mail -->
+                        <div class="toolbar-field flex items-center rounded px-2 py-1 min-w-[170px] max-w-[240px] flex-1" title="Click để sao chép Email">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase mr-1 flex-shrink-0">Mail:</span>
                             <input id="mailtm-info-email" readonly type="text" value="..." onclick="copyField(this, 'Email')"
-                                   class="w-full text-xs font-semibold bg-slate-900/50 border border-cyber-border rounded px-2 py-1 text-white cursor-pointer hover:border-blue-500/50 transition">
+                                   class="text-xs font-semibold text-white cursor-pointer w-full focus:outline-none truncate">
                         </div>
-                        <div class="relative">
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Pass Mail</label>
+
+                        <!-- Pass Mail -->
+                        <div class="toolbar-field flex items-center rounded px-2 py-1 min-w-[110px] max-w-[150px] flex-shrink-0" title="Click để sao chép Pass Mail">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase mr-1 flex-shrink-0">Pass:</span>
                             <input id="mailtm-info-pass" readonly type="text" value="..." onclick="copyField(this, 'Pass Mail')"
-                                   class="w-full text-xs font-semibold bg-slate-900/50 border border-cyber-border rounded px-2 py-1 text-white cursor-pointer hover:border-blue-500/50 transition">
+                                   class="text-xs font-semibold text-white cursor-pointer w-full focus:outline-none truncate">
                         </div>
-                        <div class="relative">
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Pass TikTok</label>
+
+                        <!-- Pass TikTok -->
+                        <div class="toolbar-field flex items-center rounded px-2 py-1 min-w-[110px] max-w-[150px] flex-shrink-0" title="Click để sao chép Pass TikTok">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase mr-1 flex-shrink-0">Pass TT:</span>
                             <input id="mailtm-info-pass2" readonly type="text" value="..." onclick="copyField(this, 'Pass TikTok')"
-                                   class="w-full text-xs font-semibold bg-slate-900/50 border border-cyber-border rounded px-2 py-1 text-white cursor-pointer hover:border-blue-500/50 transition">
+                                   class="text-xs font-semibold text-white cursor-pointer w-full focus:outline-none truncate">
                         </div>
-                        <div class="relative flex items-end">
-                            <div class="flex-1 mr-1">
-                                <label class="block text-[10px] font-bold text-red-400 uppercase mb-0.5">Mã 2FA</label>
-                                <input id="mailtm-info-2fa" readonly type="text" value="..." onclick="copyField(this, '2FA Code')"
-                                       class="w-full text-xs font-bold bg-red-950/20 border border-red-500/20 rounded px-2 py-1 text-red-400 cursor-pointer hover:border-red-500/50 transition">
-                            </div>
-                            <button onclick="mailtmRefresh2FA()" class="bg-slate-800 hover:bg-slate-700 border border-cyber-border p-1 rounded text-slate-300 hover:text-white transition" title="Làm mới 2FA">
-                                <i class="fa-solid fa-rotate-right text-xs"></i>
+
+                        <!-- Mã 2FA -->
+                        <div class="flex items-center bg-red-950/20 border border-red-500/30 rounded px-2 py-1 min-w-[125px] flex-shrink-0" title="Click để sao chép Mã 2FA">
+                            <span class="text-[10px] font-bold text-red-400 uppercase mr-1 flex-shrink-0">2FA:</span>
+                            <input id="mailtm-info-2fa" readonly type="text" value="..." onclick="copyField(this, '2FA Code')"
+                                   class="bg-transparent text-xs font-bold text-red-400 cursor-pointer w-full focus:outline-none tracking-wider">
+                            <button onclick="mailtmRefresh2FA()" class="ml-1 text-slate-400 hover:text-white transition flex-shrink-0" title="Lấy mã 2FA mới">
+                                <i class="fa-solid fa-rotate-right text-[10px]"></i>
                             </button>
                         </div>
+
+                        <!-- Ghi chú (Note) -->
+                        <div class="toolbar-field flex items-center rounded px-2 py-1 min-w-[100px] max-w-[140px] flex-shrink-0">
+                            <span class="text-[10px] font-bold text-blue-400 uppercase mr-1 flex-shrink-0">Note:</span>
+                            <input id="mailtm-info-note" type="text" placeholder="Ghi chú..."
+                                   class="text-xs font-medium text-blue-400 placeholder-slate-500 w-full focus:outline-none">
+                        </div>
                     </div>
-                    
-                    <!-- Dòng thao tác gộp Đăng nhập & Bypass Smart+ -->
-                    <div class="flex items-center space-x-2">
-                        <button onclick="window.tabMailtm.mailtmRunSelenium()" class="flex-1 bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white tracking-wider py-1.5 px-3 rounded-lg transition shadow-sm flex items-center justify-center">
-                            <span>ĐĂNG NHẬP VÀO TIKTOK ADS</span>
-                        </button>
-                        <div class="flex items-center space-x-2 px-2.5 py-1 bg-cyber-bg/70 border border-cyber-border rounded-lg flex-shrink-0">
-                            <span class="text-[11px] font-semibold text-slate-300">Bypass Smart+</span>
+
+                    <!-- Actions bên phải: Smart+ & Đăng nhập -->
+                    <div class="flex items-center space-x-2 flex-shrink-0">
+                        <div class="flex items-center space-x-1.5 px-2 py-1 bg-cyber-bg border border-cyber-border rounded">
+                            <span class="text-[11px] font-semibold text-slate-300">Smart+</span>
                             <button id="mailtm-btn-smartplus" onclick="window.tabMailtm.toggleSmartPlus()" 
                                     class="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider transition border bg-emerald-500/20 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/30">
                                 <span id="mailtm-smartplus-status">BẬT</span>
                             </button>
                         </div>
+
+                        <button onclick="window.tabMailtm.mailtmRunSelenium()" 
+                                class="bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white tracking-wide py-1.5 px-3.5 rounded transition shadow-sm flex items-center space-x-1.5 flex-shrink-0">
+                            <span>ĐĂNG NHẬP TIKTOK ADS</span>
+                        </button>
                     </div>
                 </div>
 
-                <!-- CHIA ĐÔI INBOX VÀ NỘI DUNG (VERTICAL DIVISION) -->
-                <div class="flex-1 flex space-x-3 overflow-hidden">
-                    <!-- HỘP THƯ (INBOX LIST) -->
-                    <div class="w-2/5 bg-cyber-card border border-cyber-border rounded-lg flex flex-col overflow-hidden shadow-sm">
-                        <div class="px-3 py-1.5 border-b border-cyber-border flex items-center justify-between">
+                <!-- WORKSPACE FULL HEIGHT (CHIA ĐÔI DỌC INBOX & TRÌNH ĐỌC) -->
+                <div class="flex-1 flex overflow-hidden">
+                    <!-- HỘP THƯ ĐẾN (INBOX LIST - 320PX) -->
+                    <div class="w-80 bg-cyber-card border-r border-cyber-border flex flex-col overflow-hidden flex-shrink-0 shadow-sm">
+                        <div class="px-3 py-2 border-b border-cyber-border flex items-center justify-between">
                             <h3 class="text-xs font-bold text-white uppercase tracking-wider">Hộp Thư Đến</h3>
                             <button onclick="window.tabMailtm.mailtmRefreshInbox()" class="text-[10px] bg-slate-800 hover:bg-slate-700 px-2.5 py-0.5 rounded border border-cyber-border text-slate-300 font-medium transition-colors">
                                 <span>Làm mới</span>
@@ -439,16 +464,13 @@
                         </div>
                     </div>
 
-                    <!-- NỘI DUNG THƯ CHI TIẾT -->
-                    <div class="w-3/5 bg-cyber-card border border-cyber-border rounded-lg flex flex-col overflow-hidden shadow-sm">
-                        <!-- Header Content -->
-                        <div class="px-3 py-1.5 border-b border-cyber-border flex items-center justify-between">
+                    <!-- NỘI DUNG THƯ CHI TIẾT (READER - EXPANDED FULL WIDTH) -->
+                    <div class="flex-1 bg-cyber-bg flex flex-col overflow-hidden">
+                        <div class="px-3 py-2 border-b border-cyber-border flex items-center justify-between bg-cyber-card/50">
                             <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Nội Dung Chi Tiết</span>
                         </div>
                         
-                        <!-- Area Reader -->
-                        <div class="flex-1 p-2.5 overflow-y-auto relative" id="mail-reader-container">
-                            <!-- Iframe HTML view (Render 100% css/layout natively!) -->
+                        <div class="flex-1 p-3 overflow-y-auto relative" id="mail-reader-container">
                             <iframe id="email-html-content" class="w-full h-full bg-white rounded border-0 hidden"></iframe>
                             
                             <div id="mail-reader-empty" class="absolute inset-0 flex items-center justify-center text-slate-500 text-xs">
@@ -504,57 +526,69 @@
             </aside>
 
             <!-- RIGHT PANEL: CHI TIẾT & HỘP THƯ -->
-            <section class="flex-1 flex flex-col h-full bg-cyber-bg overflow-hidden p-3">
-                <!-- KHUNG THÔNG TIN ACC (INFO BOX GỌN GÀNG) -->
-                <div class="bg-cyber-card border border-cyber-border rounded-lg p-2.5 mb-2.5 shadow-sm">
-                    <div class="grid grid-cols-5 gap-2 mb-2">
-                        <div class="relative">
-                            <label class="block text-[10px] font-bold text-blue-400 uppercase mb-0.5">Ghi chú (Note)</label>
-                            <input id="outlook-info-note" type="text" placeholder="Đặt ghi chú..."
-                                   class="w-full text-xs font-bold bg-slate-900/50 border border-cyber-border rounded px-2 py-1 text-blue-400 focus:outline-none focus:border-blue-500/50 transition">
-                        </div>
-                        <div class="relative">
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">User/Mail</label>
+            <section class="flex-1 flex flex-col h-full bg-cyber-bg overflow-hidden">
+                <!-- TOP CONTROL TOOLBAR (HEIGHT ~40px) -->
+                <div class="bg-cyber-card border-b border-cyber-border px-3 py-1.5 flex items-center justify-between gap-2 flex-shrink-0 shadow-sm z-10">
+                    <!-- Thông tin Acc: User, Mail, Pass TT, Pass Mail, Note -->
+                    <div class="flex items-center gap-1.5 flex-1 min-w-0 overflow-x-auto py-0.5">
+                        <!-- User/Mail -->
+                        <div class="toolbar-field flex items-center rounded px-2 py-1 min-w-[150px] max-w-[210px] flex-1" title="Click để sao chép Username">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase mr-1 flex-shrink-0">User:</span>
                             <input id="outlook-info-user" readonly type="text" value="..." onclick="copyField(this, 'Username')"
-                                   class="w-full text-xs font-semibold bg-slate-900/50 border border-cyber-border rounded px-2 py-1 text-white cursor-pointer hover:border-blue-500/50 transition">
+                                   class="text-xs font-semibold text-white cursor-pointer w-full focus:outline-none truncate">
                         </div>
-                        <div class="relative">
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Email Outlook</label>
+
+                        <!-- Email Outlook -->
+                        <div class="toolbar-field flex items-center rounded px-2 py-1 min-w-[170px] max-w-[230px] flex-1" title="Click để sao chép Email">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase mr-1 flex-shrink-0">Mail:</span>
                             <input id="outlook-info-email" readonly type="text" value="..." onclick="copyField(this, 'Email')"
-                                   class="w-full text-xs font-semibold bg-slate-900/50 border border-cyber-border rounded px-2 py-1 text-white cursor-pointer hover:border-blue-500/50 transition">
+                                   class="text-xs font-semibold text-white cursor-pointer w-full focus:outline-none truncate">
                         </div>
-                        <div class="relative">
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Pass TikTok</label>
+
+                        <!-- Pass TikTok -->
+                        <div class="toolbar-field flex items-center rounded px-2 py-1 min-w-[110px] max-w-[150px] flex-shrink-0" title="Click để sao chép Pass TikTok">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase mr-1 flex-shrink-0">Pass TT:</span>
                             <input id="outlook-info-pass-tt" readonly type="text" value="..." onclick="copyField(this, 'Pass TikTok')"
-                                   class="w-full text-xs font-semibold bg-slate-900/50 border border-cyber-border rounded px-2 py-1 text-white cursor-pointer hover:border-blue-500/50 transition">
+                                   class="text-xs font-semibold text-white cursor-pointer w-full focus:outline-none truncate">
                         </div>
-                        <div class="relative">
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Pass Outlook</label>
+
+                        <!-- Pass Outlook -->
+                        <div class="toolbar-field flex items-center rounded px-2 py-1 min-w-[110px] max-w-[150px] flex-shrink-0" title="Click để sao chép Pass Outlook">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase mr-1 flex-shrink-0">Pass Mail:</span>
                             <input id="outlook-info-pass-mail" readonly type="text" value="..." onclick="copyField(this, 'Pass Outlook')"
-                                   class="w-full text-xs font-semibold bg-slate-900/50 border border-cyber-border rounded px-2 py-1 text-white cursor-pointer hover:border-blue-500/50 transition">
+                                   class="text-xs font-semibold text-white cursor-pointer w-full focus:outline-none truncate">
+                        </div>
+
+                        <!-- Ghi chú (Note) -->
+                        <div class="toolbar-field flex items-center rounded px-2 py-1 min-w-[100px] max-w-[140px] flex-shrink-0">
+                            <span class="text-[10px] font-bold text-blue-400 uppercase mr-1 flex-shrink-0">Note:</span>
+                            <input id="outlook-info-note" type="text" placeholder="Ghi chú..."
+                                   class="text-xs font-medium text-blue-400 placeholder-slate-500 w-full focus:outline-none">
                         </div>
                     </div>
 
-                    <!-- Dòng thao tác gộp Đăng nhập & Bypass Smart+ -->
-                    <div class="flex items-center space-x-2">
-                        <button onclick="window.tabOutlook.outlookRunSelenium()" class="flex-1 bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white tracking-wider py-1.5 px-3 rounded-lg transition shadow-sm flex items-center justify-center">
-                            <span>MỞ TRÌNH DUYỆT ĐĂNG NHẬP</span>
-                        </button>
-                        <div class="flex items-center space-x-2 px-2.5 py-1 bg-cyber-bg/70 border border-cyber-border rounded-lg flex-shrink-0">
-                            <span class="text-[11px] font-semibold text-slate-300">Bypass Smart+</span>
+                    <!-- Actions bên phải: Smart+ & Đăng nhập -->
+                    <div class="flex items-center space-x-2 flex-shrink-0">
+                        <div class="flex items-center space-x-1.5 px-2 py-1 bg-cyber-bg border border-cyber-border rounded">
+                            <span class="text-[11px] font-semibold text-slate-300">Smart+</span>
                             <button id="outlook-btn-smartplus" onclick="window.tabOutlook.toggleSmartPlus()" 
                                     class="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider transition border bg-emerald-500/20 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/30">
                                 <span id="outlook-smartplus-status">BẬT</span>
                             </button>
                         </div>
+
+                        <button onclick="window.tabOutlook.outlookRunSelenium()" 
+                                class="bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white tracking-wide py-1.5 px-3.5 rounded transition shadow-sm flex items-center space-x-1.5 flex-shrink-0">
+                            <span>MỞ TRÌNH DUYỆT ĐĂNG NHẬP</span>
+                        </button>
                     </div>
                 </div>
 
-                <!-- CHIA ĐÔI INBOX VÀ NỘI DUNG (VERTICAL DIVISION) -->
-                <div class="flex-1 flex space-x-3 overflow-hidden">
-                    <!-- HỘP THƯ (INBOX LIST) -->
-                    <div class="w-2/5 bg-cyber-card border border-cyber-border rounded-lg flex flex-col overflow-hidden shadow-sm">
-                        <div class="px-3 py-1.5 border-b border-cyber-border flex items-center justify-between">
+                <!-- WORKSPACE FULL HEIGHT (CHIA ĐÔI DỌC INBOX & TRÌNH ĐỌC) -->
+                <div class="flex-1 flex overflow-hidden">
+                    <!-- HỘP THƯ ĐẾN (INBOX LIST - 320PX) -->
+                    <div class="w-80 bg-cyber-card border-r border-cyber-border flex flex-col overflow-hidden flex-shrink-0 shadow-sm">
+                        <div class="px-3 py-2 border-b border-cyber-border flex items-center justify-between">
                             <h3 class="text-xs font-bold text-white uppercase tracking-wider">Hộp Thư Đến</h3>
                             <button onclick="window.tabOutlook.outlookRefreshInbox()" class="text-[10px] bg-slate-800 hover:bg-slate-700 px-2.5 py-0.5 rounded border border-cyber-border text-slate-300 font-medium transition-colors">
                                 <span>Làm mới</span>
@@ -565,15 +599,13 @@
                         </div>
                     </div>
 
-                    <!-- NỘI DUNG THƯ CHI TIẾT -->
-                    <div class="w-3/5 bg-cyber-card border border-cyber-border rounded-lg flex flex-col overflow-hidden shadow-sm">
-                        <!-- Header Content -->
-                        <div class="px-3 py-1.5 border-b border-cyber-border flex items-center justify-between">
+                    <!-- NỘI DUNG THƯ CHI TIẾT (READER - EXPANDED FULL WIDTH) -->
+                    <div class="flex-1 bg-cyber-bg flex flex-col overflow-hidden">
+                        <div class="px-3 py-2 border-b border-cyber-border flex items-center justify-between bg-cyber-card/50">
                             <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Nội Dung Chi Tiết</span>
                         </div>
                         
-                        <!-- Area Reader -->
-                        <div class="flex-1 p-2.5 overflow-y-auto relative" id="outlook-reader-container">
+                        <div class="flex-1 p-3 overflow-y-auto relative" id="outlook-reader-container">
                             <pre id="outlook-text-content" class="text-xs text-slate-300 font-mono whitespace-pre-wrap leading-relaxed w-full h-full"></pre>
                             
                             <div id="outlook-reader-empty" class="absolute inset-0 flex items-center justify-center text-slate-500 text-xs">
