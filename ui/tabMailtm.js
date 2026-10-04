@@ -113,8 +113,12 @@ class TabMailtm {
                         <span class="text-slate-400 font-mono mr-1.5">${index + 1}.</span>
                         ${displayName}
                     </div>
-                    <div class="flex items-center space-x-2 flex-shrink-0">
+                    <div class="flex items-center space-x-1 flex-shrink-0">
                         ${badgeHtml}
+                        <button onclick="event.stopPropagation(); window.tabMailtm.openEditModal(${index})" 
+                                class="text-slate-400 hover:text-blue-400 p-1 rounded transition-colors duration-150" title="Sửa tài khoản này">
+                            <i class="fa-solid fa-pen-to-square text-[10px]"></i>
+                        </button>
                         <button onclick="event.stopPropagation(); window.tabMailtm.deleteAccount(${index})" 
                                 class="text-slate-400 hover:text-rose-500 p-1 rounded transition-colors duration-150" title="Xóa tài khoản này">
                             <i class="fa-solid fa-trash-can text-[10px]"></i>
@@ -124,6 +128,29 @@ class TabMailtm {
             `;
             this.listContainer.appendChild(item);
         });
+    }
+
+    openEditModal(index = null) {
+        const targetIndex = index !== null ? index : this.selectedAccountIndex;
+        if (targetIndex === null || !this.accounts[targetIndex]) {
+            showToast('Vui lòng chọn tài khoản cần sửa!');
+            return;
+        }
+        const acc = this.accounts[targetIndex];
+        currentEditContext = { tab: 'mailtm', index: targetIndex };
+
+        document.getElementById('modal-edit-title').textContent = 'Chỉnh sửa tài khoản Mail.tm';
+        document.getElementById('edit-lbl-field1').textContent = 'Email Mail.tm';
+        document.getElementById('edit-input-field1').value = acc.email || '';
+        document.getElementById('edit-lbl-field2').textContent = 'Mật khẩu Mail';
+        document.getElementById('edit-input-field2').value = acc.password || '';
+        document.getElementById('edit-lbl-field3').textContent = 'Mật khẩu TikTok';
+        document.getElementById('edit-input-field3').value = acc.pass2 || acc.password || '';
+        document.getElementById('edit-lbl-field4').textContent = 'Mã bí mật 2FA';
+        document.getElementById('edit-input-field4').value = acc['2fa_secret'] || '';
+        document.getElementById('edit-quick-paste').value = '';
+
+        document.getElementById('modal-edit-account').classList.remove('hidden');
     }
 
     async selectAccount(index) {
@@ -136,7 +163,7 @@ class TabMailtm {
         this.infoPass.value = acc.password;
         this.infoPass2.value = acc.pass2 || acc.password;
         this.info2FA.value = '...';
-        this.infoNote.value = acc.note || '';
+        if (this.infoNote) this.infoNote.value = acc.note || '';
 
         // Tạo OTP tự động
         this.generateOTP(acc['2fa_secret']);
@@ -169,7 +196,7 @@ class TabMailtm {
                 this.infoPass.value = '...';
                 this.infoPass2.value = '...';
                 this.info2FA.value = '...';
-                this.infoNote.value = '';
+                if (this.infoNote) this.infoNote.value = '';
                 this.clearReader();
                 this.inboxListContainer.innerHTML = '';
                 if (this.inboxInterval) clearInterval(this.inboxInterval);

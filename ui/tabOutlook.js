@@ -132,8 +132,12 @@ class TabOutlook {
                         ${displayName}
                         <span class="text-[10px] text-slate-500 ml-1">(${acc.type ? acc.type.toUpperCase() : 'BASIC'})</span>
                     </div>
-                    <div class="flex items-center space-x-2 flex-shrink-0">
+                    <div class="flex items-center space-x-1 flex-shrink-0">
                         ${badgeHtml}
+                        <button onclick="event.stopPropagation(); window.tabOutlook.openEditModal(${originalIndex})" 
+                                class="text-slate-400 hover:text-blue-400 p-1 rounded transition-colors duration-150" title="Sửa tài khoản này">
+                            <i class="fa-solid fa-pen-to-square text-[10px]"></i>
+                        </button>
                         <button onclick="event.stopPropagation(); window.tabOutlook.deleteAccount(${originalIndex})" 
                                 class="text-slate-400 hover:text-rose-500 p-1 rounded transition-colors duration-150" title="Xóa tài khoản này">
                             <i class="fa-solid fa-trash-can text-[10px]"></i>
@@ -143,6 +147,29 @@ class TabOutlook {
             `;
             this.listContainer.appendChild(item);
         });
+    }
+
+    openEditModal(index = null) {
+        const targetIndex = index !== null ? index : this.selectedAccountIndex;
+        if (targetIndex === null || !this.accounts[targetIndex]) {
+            showToast('Vui lòng chọn tài khoản cần sửa!');
+            return;
+        }
+        const acc = this.accounts[targetIndex];
+        currentEditContext = { tab: 'outlook', index: targetIndex };
+
+        document.getElementById('modal-edit-title').textContent = 'Chỉnh sửa tài khoản Outlook';
+        document.getElementById('edit-lbl-field1').textContent = 'Username / TikTok';
+        document.getElementById('edit-input-field1').value = acc.user_tt || acc.email || '';
+        document.getElementById('edit-lbl-field2').textContent = 'Email Outlook';
+        document.getElementById('edit-input-field2').value = acc.email || '';
+        document.getElementById('edit-lbl-field3').textContent = 'Mật khẩu TikTok';
+        document.getElementById('edit-input-field3').value = acc.pass_tt || '';
+        document.getElementById('edit-lbl-field4').textContent = 'Mật khẩu Outlook';
+        document.getElementById('edit-input-field4').value = acc.pass_mail || '';
+        document.getElementById('edit-quick-paste').value = '';
+
+        document.getElementById('modal-edit-account').classList.remove('hidden');
     }
 
     async selectAccount(index) {
@@ -155,8 +182,8 @@ class TabOutlook {
         this.infoEmail.value = acc.email;
         this.infoPassTT.value = acc.pass_tt;
         this.infoPassMail.value = acc.pass_mail;
-        this.info2FA.value = '...';
-        this.infoNote.value = acc.note || '';
+        if (this.info2FA) this.info2FA.value = '...';
+        if (this.infoNote) this.infoNote.value = acc.note || '';
 
         // Tính toán mã OTP tự động
         this.generateOTP(acc['2fa_secret']);
@@ -218,8 +245,8 @@ class TabOutlook {
                 this.infoEmail.value = '...';
                 this.infoPassTT.value = '...';
                 this.infoPassMail.value = '...';
-                this.info2FA.value = '...';
-                this.infoNote.value = '';
+                if (this.info2FA) this.info2FA.value = '...';
+                if (this.infoNote) this.infoNote.value = '';
                 this.clearReader();
                 this.inboxListContainer.innerHTML = '';
                 if (this.inboxInterval) clearInterval(this.inboxInterval);
