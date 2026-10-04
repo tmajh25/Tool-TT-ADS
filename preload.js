@@ -10,6 +10,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     // Selenium Automation APIs
     loginTikTokAds: (email, tiktokPass, mailPass) => ipcRenderer.send('login-tiktok-ads', { email, tiktokPass, mailPass }),
     loginOutlookBrowser: (email, password, secret) => ipcRenderer.send('login-outlook-browser', { email, password, secret }),
+    toggleSmartPlus: (email, enabled) => ipcRenderer.invoke('toggle-smartplus', { email, enabled }),
     onAutomationProgress: (callback) => ipcRenderer.on('automation-progress', (event, value) => callback(value)),
 
     // OAuth/Outlook APIs

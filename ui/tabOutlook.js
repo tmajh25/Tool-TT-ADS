@@ -8,6 +8,7 @@ class TabOutlook {
         this.selectedMessageId = null;
         this.searchQuery = '';
         this.inboxInterval = null;
+        this.smartPlusEnabled = true;
         
         // DOM Elements
         this.listContainer = document.getElementById('outlook-accounts-list');
@@ -32,6 +33,13 @@ class TabOutlook {
         this.accounts = await window.electronAPI.loadOutlookAccounts() || [];
         this.renderAccounts();
         
+        // Tải cấu hình Smart+
+        try {
+            const settings = await window.electronAPI.loadSettings() || {};
+            this.smartPlusEnabled = settings.bypassSmartPlus !== false;
+            this.updateSmartPlusUI();
+        } catch (e) {}
+
         // Gắn sự kiện gõ ô tìm kiếm ở list
         const searchBox = document.getElementById('outlook-quick-paste'); // Có thể dùng chung hoặc tạo ô tìm kiếm ở sidebar
         const searchInput = document.getElementById('outlook-search-user');
@@ -445,6 +453,46 @@ class TabOutlook {
 
     saveAccounts() {
         window.electronAPI.saveOutlookAccounts(this.accounts);
+    }
+
+    updateSmartPlusUI() {
+        const btn = document.getElementById('outlook-btn-smartplus');
+        const status = document.getElementById('outlook-smartplus-status');
+        if (!btn || !status) return;
+        if (this.smartPlusEnabled) {
+            btn.className = "px-2.5 py-0.5 rounded text-[10px] font-bold tracking-wider transition border bg-emerald-500/20 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/30";
+            status.textContent = "BẬT";
+        } else {
+            btn.className = "px-2.5 py-0.5 rounded text-[10px] font-bold tracking-wider transition border bg-slate-800 text-slate-400 border-slate-700 hover:bg-slate-700";
+            status.textContent = "TẮT";
+        }
+    }
+
+    async toggleSmartPlus() {
+        this.smartPlusEnabled = !this.smartPlusEnabled;
+        this.updateSmartPlusUI();
+
+        try {
+            const settings = await window.electronAPI.loadSettings() || {};
+            settings.bypassSmartPlus = this.smartPlusEnabled;
+            await window.electronAPI.saveSettings(settings);
+            if (window.tabSettings && window.tabSettings.bypassSmartPlusCheckbox) {
+                window.tabSettings.bypassSmartPlusCheckbox.checked = this.smartPlusEnabled;
+            }
+        } catch (e) {}
+
+        if (this.selectedAccountIndex !== null) {
+            const acc = this.accounts[this.selectedAccountIndex];
+            try {
+                const res = await window.electronAPI.toggleSmartPlus(acc.email, this.smartPlusEnabled);
+                if (res && res.success) {
+                    showToast(this.smartPlusEnabled ? "Đã BẬT Bypass TikTok Smart+ trên trình duyệt!" : "Đã TẮT Bypass TikTok Smart+ trên trình duyệt!");
+                    return;
+                }
+            } catch (e) {}
+        }
+
+        showToast(this.smartPlusEnabled ? "Đã BẬT chế độ Bypass Smart+ (Chiến dịch thủ công)" : "Đã TẮT chế độ Bypass Smart+");
     }
 }
 

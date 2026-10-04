@@ -10,6 +10,7 @@ class TabSettings {
         this.cfSyncCheckbox = document.getElementById('settings-cf-sync');
         this.cfUrlInput = document.getElementById('settings-cf-url');
         this.cfKeyInput = document.getElementById('settings-cf-key');
+        this.bypassSmartPlusCheckbox = document.getElementById('settings-bypass-smartplus');
     }
 
     async init() {
@@ -25,6 +26,7 @@ class TabSettings {
             if (this.cfSyncCheckbox) this.cfSyncCheckbox.checked = !!settings.cfSync;
             if (this.cfUrlInput) this.cfUrlInput.value = settings.cfUrl || '';
             if (this.cfKeyInput) this.cfKeyInput.value = settings.cfKey || '';
+            if (this.bypassSmartPlusCheckbox) this.bypassSmartPlusCheckbox.checked = settings.bypassSmartPlus !== false;
             
             // Đọc cấu hình khởi động từ hệ thống qua IPC
             if (window.electronAPI.getStartup) {
@@ -54,7 +56,8 @@ class TabSettings {
             theme: this.themeSelect.value,
             cfSync: this.cfSyncCheckbox ? this.cfSyncCheckbox.checked : false,
             cfUrl: this.cfUrlInput ? this.cfUrlInput.value.trim() : '',
-            cfKey: this.cfKeyInput ? this.cfKeyInput.value.trim() : ''
+            cfKey: this.cfKeyInput ? this.cfKeyInput.value.trim() : '',
+            bypassSmartPlus: this.bypassSmartPlusCheckbox ? this.bypassSmartPlusCheckbox.checked : true
         };
 
         try {

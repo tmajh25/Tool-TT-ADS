@@ -24,6 +24,7 @@ const chrome = require('selenium-webdriver/chrome');
 const axios = require('axios');
 const otplib = require('otplib');
 const cacheService = require('./cacheService');
+const smartplusHelper = require('./smartplusHelper');
 
 class SeleniumService {
     constructor() {
@@ -180,6 +181,25 @@ class SeleniumService {
         }
     }
 
+    async toggleSmartPlus(email, enabled) {
+        const driver = this.activeDrivers.get((email || '').toLowerCase());
+        if (!driver) return { success: false, error: 'Không tìm thấy phiên trình duyệt đang mở cho tài khoản này' };
+
+        try {
+            const script = smartplusHelper.getInjectionScript(enabled);
+            await driver.executeScript(`
+                ${script}
+                if (typeof window.__setTTSmartPlusBypass === 'function') {
+                    return window.__setTTSmartPlusBypass(${enabled ? 'true' : 'false'});
+                }
+                return { success: true, enabled: ${enabled ? 'true' : 'false'} };
+            `);
+            return { success: true, enabled };
+        } catch (e) {
+            return { success: false, error: e.message };
+        }
+    }
+
     async getMailtmCode(email, mailPass, ignoreIds = [], progressCallback) {
         try {
             progressCallback("📩 Đang đăng nhập Mail.tm để lấy mã xác thực...");
@@ -309,6 +329,18 @@ class SeleniumService {
             
             this.activeDrivers.set(email.toLowerCase(), driver);
             await driver.manage().window().maximize();
+
+            // Tự động tiêm Bypass Smart+ qua CDP nếu được bật
+            if (settings.bypassSmartPlus !== false) {
+                try {
+                    await driver.sendAndGetDevToolsCommand('Page.addScriptToEvaluateOnNewDocument', {
+                        source: smartplusHelper.getInjectionScript(true)
+                    });
+                    progressCallback("Đã kích hoạt tính năng Bypass TikTok Smart+...");
+                } catch (e) {
+                    console.error("Lỗi tiêm CDP Bypass:", e);
+                }
+            }
 
             // Luôn truy cập thẳng trang đăng nhập chính thức để điền thông tin
             progressCallback("🚀 Đang truy cập trang đăng nhập TikTok Ads...");
@@ -729,6 +761,13 @@ class SeleniumService {
                 if (settings.proxy) options.addArguments(`--proxy-server=${settings.proxy}`);
 
                 driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build();
+                if (settings.bypassSmartPlus !== false) {
+                    try {
+                        await driver.sendAndGetDevToolsCommand('Page.addScriptToEvaluateOnNewDocument', {
+                            source: smartplusHelper.getInjectionScript(true)
+                        });
+                    } catch (e) {}
+                }
                 createdDriver = true;
 
                 await driver.get('https://ads.tiktok.com/i18n/login');
@@ -1092,6 +1131,13 @@ class SeleniumService {
                 if (settings.proxy) options.addArguments(`--proxy-server=${settings.proxy}`);
 
                 driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build();
+                if (settings.bypassSmartPlus !== false) {
+                    try {
+                        await driver.sendAndGetDevToolsCommand('Page.addScriptToEvaluateOnNewDocument', {
+                            source: smartplusHelper.getInjectionScript(true)
+                        });
+                    } catch (e) {}
+                }
                 this.activeDrivers.set(lowerEmail, driver);
 
                 await driver.get('https://ads.tiktok.com/i18n/login');

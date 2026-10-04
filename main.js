@@ -84,6 +84,10 @@ ipcMain.on('login-tiktok-ads', async (event, { email, tiktokPass, mailPass }) =>
     await seleniumService.loginTikTokAds(email, tiktokPass, mailPass, progressCallback);
 });
 
+ipcMain.handle('toggle-smartplus', async (event, { email, enabled }) => {
+    return await seleniumService.toggleSmartPlus(email, enabled);
+});
+
 ipcMain.on('login-outlook-browser', async (event, { email, password, secret }) => {
     const progressCallback = (msg) => {
         if (mainWindow) {
