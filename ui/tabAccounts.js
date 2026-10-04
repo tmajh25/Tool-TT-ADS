@@ -786,6 +786,54 @@ class TabAccounts {
         menu.style.left = `${rect.left}px`;
         menu.classList.remove('hidden');
     }
+
+    openAppealModal() {
+        if (!this.selectedAccount) {
+            showToast("Vui lòng chọn tài khoản cần kháng trước!");
+            return;
+        }
+        const acc = this.selectedAccount.type === 'mailtm' 
+            ? this.mailtmAccounts[this.selectedAccount.originalIndex] 
+            : this.outlookAccounts[this.selectedAccount.originalIndex];
+        if (!acc) return;
+
+        const emailEl = document.getElementById('appeal-target-email');
+        if (emailEl) emailEl.textContent = acc.email || acc.user_tt || '...';
+
+        const reasonInput = document.getElementById('appeal-reason-input');
+        if (reasonInput && !reasonInput.value) {
+            reasonInput.value = "Tài khoản của chúng tôi tuân thủ đầy đủ Chính sách Quảng cáo của TikTok. Các chiến dịch quảng cáo được triển khai nghiêm túc, minh bạch và đúng quy chuẩn. Kính mong đội ngũ hỗ trợ TikTok kiểm tra và mở khóa tài khoản giúp chúng tôi tiếp tục hoạt động kinh doanh. Xin chân thành cảm ơn!";
+        }
+
+        const modal = document.getElementById('modal-appeal-account');
+        if (modal) modal.classList.remove('hidden');
+    }
+
+    runAppeal() {
+        if (!this.selectedAccount) return;
+        const acc = this.selectedAccount.type === 'mailtm' 
+            ? this.mailtmAccounts[this.selectedAccount.originalIndex] 
+            : this.outlookAccounts[this.selectedAccount.originalIndex];
+        if (!acc) return;
+
+        const reason = document.getElementById('appeal-reason-input')?.value?.trim() || '';
+        closeAppealModal();
+
+        const email = acc.email;
+        const pass = acc.pass2 || acc.password || acc.pass_tt || '';
+        const secret = acc['2fa_secret'] || '';
+        const mailPass = acc.password || acc.pass_mail || '';
+
+        if (email) this.activeBrowserEmails.add(email.toLowerCase());
+        if (acc.user_tt) this.activeBrowserEmails.add(acc.user_tt.toLowerCase());
+        this.renderAccounts();
+        this.updateBrowserStatusBadge();
+
+        showStatus(`Đang tiến hành tự động kháng tài khoản: ${email}...`);
+        showToast("Đang chạy luồng tự động kháng tài khoản TikTok Ads!");
+
+        window.electronAPI.autoAppealAccount(email, pass, secret, mailPass, reason);
+    }
 }
 
 // Khởi tạo đối tượng toàn cục

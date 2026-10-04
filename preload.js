@@ -12,6 +12,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     loginOutlookBrowser: (email, password, secret) => ipcRenderer.send('login-outlook-browser', { email, password, secret }),
     toggleSmartPlus: (email, enabled) => ipcRenderer.invoke('toggle-smartplus', { email, enabled }),
     getActiveBrowsers: () => ipcRenderer.invoke('get-active-browsers'),
+    autoAppealAccount: (email, password, secret, mailPass, reason) => ipcRenderer.send('auto-appeal-account', { email, password, secret, mailPass, reason }),
     onAutomationProgress: (callback) => ipcRenderer.on('automation-progress', (event, value) => callback(value)),
 
     // OAuth/Outlook APIs

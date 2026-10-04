@@ -1361,6 +1361,184 @@ class SeleniumService {
             return { success: false, error: e.message };
         }
     }
+
+    async autoAppealTikTokAds(email, password, secret, mailPass, progressCallback, customReason = '') {
+        const lowerEmail = (email || '').toLowerCase();
+        let driver = this.activeDrivers.get(lowerEmail);
+
+        progressCallback("Bắt đầu quy trình tự động kháng tài khoản TikTok Ads...");
+
+        try {
+            // 1. Kiểm tra driver đang mở
+            if (driver) {
+                try {
+                    await driver.getTitle();
+                } catch (e) {
+                    this.activeDrivers.delete(lowerEmail);
+                    driver = null;
+                }
+            }
+
+            // 2. Nếu chưa có driver, tiến hành mở và đăng nhập
+            if (!driver) {
+                progressCallback("Chưa có phiên trình duyệt. Đang tiến hành đăng nhập vào TikTok Ads...");
+                const loginRes = await this.loginTikTokAds(email, password, mailPass || password, progressCallback, secret);
+                driver = this.activeDrivers.get(lowerEmail);
+                if (!driver) {
+                    progressCallback("Không thể mở trình duyệt hoặc đăng nhập thất bại.");
+                    return { success: false, error: 'Không thể mở trình duyệt hoặc đăng nhập thất bại.' };
+                }
+            }
+
+            progressCallback("Đang kiểm tra trạng thái tài khoản và tìm trang kháng nghị...");
+            
+            // 3. Điều hướng tới trang TikTok Ads Home hoặc Audit
+            await driver.get('https://ads.tiktok.com/i18n/home');
+            await new Promise(r => setTimeout(r, 4000));
+
+            let appealBtnFound = false;
+
+            const appealBtnSelectors = [
+                "//button[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'appeal')]",
+                "//button[contains(text(), 'Kháng nghị') or contains(text(), 'Kháng cáo') or contains(text(), 'Gửi khiếu nại')]",
+                "//a[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'appeal')]",
+                "//a[contains(text(), 'Kháng nghị') or contains(text(), 'Kháng cáo')]",
+                "//span[contains(text(), 'Kháng nghị') or contains(text(), 'Appeal')]/ancestor::button",
+                "//span[contains(text(), 'Kháng nghị') or contains(text(), 'Appeal')]/ancestor::a",
+                "//button[contains(@class, 'appeal') or contains(@class, 'audit')]"
+            ];
+
+            for (const xpath of appealBtnSelectors) {
+                try {
+                    const btns = await driver.findElements(By.xpath(xpath));
+                    for (const b of btns) {
+                        if (await b.isDisplayed()) {
+                            progressCallback("Đã tìm thấy nút Kháng nghị trên màn hình. Đang nhấp vào...");
+                            await driver.executeScript("arguments[0].click();", b);
+                            appealBtnFound = true;
+                            await new Promise(r => setTimeout(r, 3000));
+                            break;
+                        }
+                    }
+                    if (appealBtnFound) break;
+                } catch (e) {}
+            }
+
+            // Nếu không thấy nút trên trang chủ, truy cập trực tiếp trang Audit / Appeal
+            if (!appealBtnFound) {
+                progressCallback("Đang truy cập trực tiếp trang kiểm tra kháng nghị (Audit)...");
+                await driver.get('https://ads.tiktok.com/i18n/audit');
+                await new Promise(r => setTimeout(r, 4000));
+
+                for (const xpath of appealBtnSelectors) {
+                    try {
+                        const btns = await driver.findElements(By.xpath(xpath));
+                        for (const b of btns) {
+                            if (await b.isDisplayed()) {
+                                progressCallback("Đã tìm thấy nút Kháng nghị trong trang Audit. Đang mở form...");
+                                await driver.executeScript("arguments[0].click();", b);
+                                appealBtnFound = true;
+                                await new Promise(r => setTimeout(r, 3000));
+                                break;
+                            }
+                        }
+                        if (appealBtnFound) break;
+                    } catch (e) {}
+                }
+            }
+
+            // 4. Tìm khung nhập lý do giải trình (Textarea)
+            progressCallback("Đang tìm ô nhập nội dung giải trình...");
+            let reasonInput = null;
+            try {
+                const textareas = await driver.findElements(By.css('textarea, .bui-textarea__inner, div[contenteditable="true"]'));
+                for (const ta of textareas) {
+                    if (await ta.isDisplayed()) {
+                        reasonInput = ta;
+                        break;
+                    }
+                }
+            } catch (e) {}
+
+            const defaultReason = customReason || "Tài khoản của chúng tôi tuân thủ đầy đủ Chính sách Quảng cáo của TikTok. Các chiến dịch quảng cáo được triển khai nghiêm túc, minh bạch và đúng quy chuẩn. Kính mong đội ngũ hỗ trợ TikTok kiểm tra và mở khóa tài khoản giúp chúng tôi tiếp tục hoạt động kinh doanh. Xin chân thành cảm ơn!";
+
+            if (reasonInput) {
+                progressCallback("Đang tự động điền nội dung giải trình...");
+                try {
+                    await reasonInput.click();
+                    await reasonInput.clear();
+                } catch (e) {}
+                await reasonInput.sendKeys(defaultReason);
+                await driver.executeScript(`
+                    const el = arguments[0];
+                    const val = arguments[1];
+                    if (el) {
+                        el.value = val;
+                        el.dispatchEvent(new Event('input', { bubbles: true }));
+                        el.dispatchEvent(new Event('change', { bubbles: true }));
+                    }
+                `, reasonInput, defaultReason);
+                await new Promise(r => setTimeout(r, 1000));
+            } else {
+                progressCallback("Không tìm thấy khung nhập văn bản hoặc tài khoản chưa xuất hiện form.");
+            }
+
+            // 5. Kiểm tra các checkbox cam kết/đồng ý nếu có
+            try {
+                const checkboxes = await driver.findElements(By.css('input[type="checkbox"]'));
+                for (const cb of checkboxes) {
+                    if (await cb.isDisplayed()) {
+                        const isChecked = await cb.isSelected();
+                        if (!isChecked) {
+                            await driver.executeScript("arguments[0].click();", cb);
+                            await new Promise(r => setTimeout(r, 500));
+                        }
+                    }
+                }
+            } catch (e) {}
+
+            // 6. Nhấn nút Gửi / Xác nhận kháng nghị
+            progressCallback("Đang tìm nút Gửi đơn kháng nghị...");
+            let submitBtnFound = false;
+            const submitSelectors = [
+                "//button[@type='submit']",
+                "//button[contains(text(), 'Submit') or contains(text(), 'Gửi') or contains(text(), 'Xác nhận') or contains(text(), 'Hoàn tất')]",
+                "//span[contains(text(), 'Submit') or contains(text(), 'Gửi') or contains(text(), 'Xác nhận')]/ancestor::button"
+            ];
+
+            for (const xpath of submitSelectors) {
+                try {
+                    const sbtns = await driver.findElements(By.xpath(xpath));
+                    for (const sb of sbtns) {
+                        if (await sb.isDisplayed() && await sb.isEnabled()) {
+                            const btnText = (await sb.getText() || '').trim();
+                            if (btnText.includes('Cancel') || btnText.includes('Hủy') || btnText.includes('Close')) continue;
+
+                            progressCallback(`Đang nhấn nút gửi đơn: [${btnText}]...`);
+                            await driver.executeScript("arguments[0].click();", sb);
+                            submitBtnFound = true;
+                            await new Promise(r => setTimeout(r, 3000));
+                            break;
+                        }
+                    }
+                    if (submitBtnFound) break;
+                } catch (e) {}
+            }
+
+            if (submitBtnFound) {
+                progressCallback("Đã gửi đơn kháng nghị thành công lên hệ thống TikTok Ads!");
+                return { success: true, message: "Đã gửi đơn kháng nghị thành công!" };
+            } else {
+                progressCallback("Không tìm thấy nút gửi hoặc đơn đã được gửi trước đó. Vui lòng kiểm tra màn hình trình duyệt.");
+                return { success: false, message: "Không tìm thấy nút gửi hoặc đơn đã được gửi trước đó." };
+            }
+
+        } catch (e) {
+            console.error("Lỗi autoAppealTikTokAds:", e);
+            progressCallback(`Lỗi trong quá trình kháng: ${e.message}`);
+            return { success: false, error: e.message };
+        }
+    }
 }
 
 module.exports = new SeleniumService();

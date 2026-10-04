@@ -101,6 +101,15 @@ ipcMain.on('login-outlook-browser', async (event, { email, password, secret }) =
     await seleniumService.loginOutlookBrowser(email, password, secret, progressCallback);
 });
 
+ipcMain.on('auto-appeal-account', async (event, { email, password, secret, mailPass, reason }) => {
+    const progressCallback = (msg) => {
+        if (mainWindow) {
+            mainWindow.webContents.send('automation-progress', msg);
+        }
+    };
+    await seleniumService.autoAppealTikTokAds(email, password, secret, mailPass, progressCallback, reason);
+});
+
 const otplib = require('otplib');
 
 // 3. Microsoft OAuth & Outlook Email APIs
