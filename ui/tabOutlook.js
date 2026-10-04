@@ -109,7 +109,7 @@ class TabOutlook {
 
             const item = document.createElement('div');
             item.id = `outlook-item-${originalIndex}`;
-            item.className = `p-3 rounded-lg border cursor-pointer mb-2 transition-all duration-200 ${statusBg}`;
+            item.className = `px-2.5 py-1.5 rounded-md border cursor-pointer mb-1 transition-all duration-150 ${statusBg}`;
             item.onclick = () => this.selectAccount(originalIndex);
 
             let badgeHtml = '';
@@ -277,7 +277,7 @@ class TabOutlook {
             const sender = msg.from ? msg.from.emailAddress.name || msg.from.emailAddress.address : 'Unknown';
             
             const item = document.createElement('div');
-            item.className = `p-3 rounded-lg border cursor-pointer mb-2 transition ${highlightClass}`;
+            item.className = `px-2.5 py-1.5 rounded-md border cursor-pointer mb-1 transition ${highlightClass}`;
             item.onclick = () => this.selectEmail(msg.id);
 
             item.innerHTML = `

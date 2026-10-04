@@ -299,32 +299,31 @@
 <body class="h-full flex flex-col overflow-hidden">
 
     <!-- HEADER / NAVIGATION -->
-    <header class="bg-cyber-card/85 backdrop-blur-md border-b border-cyber-border px-8 py-3.5 flex items-center justify-between z-10 shadow-sm transition-all duration-300">
+    <header class="bg-cyber-card/90 backdrop-blur-md border-b border-cyber-border px-4 py-2 flex items-center justify-between z-10 shadow-sm transition-all duration-300">
         <div class="flex items-center">
-            <h1 class="text-base font-black text-white tracking-widest bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">TOOLTT</h1>
+            <h1 class="text-sm font-black text-white tracking-widest bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">TOOLTT</h1>
         </div>
 
         <!-- TABS SWITCHER -->
-        <div class="flex bg-slate-900/40 p-1 rounded-full border border-cyber-border/40 backdrop-blur-sm shadow-inner">
-            <button id="btn-tab-mailtm" onclick="switchTab('mailtm')" class="flex items-center px-6 py-2 rounded-full text-xs font-semibold tracking-wider transition-all duration-300 bg-blue-600 text-white shadow-sm">
+        <div class="flex bg-slate-900/60 p-0.5 rounded-lg border border-cyber-border/40 backdrop-blur-sm shadow-inner">
+            <button id="btn-tab-mailtm" onclick="switchTab('mailtm')" class="flex items-center px-4 py-1.5 rounded-md text-xs font-semibold tracking-wider transition-all duration-200 bg-blue-600 text-white shadow-sm">
                 <span>MAIL.TM</span>
             </button>
-            <button id="btn-tab-outlook" onclick="switchTab('outlook')" class="flex items-center px-6 py-2 rounded-full text-xs font-semibold tracking-wider transition-all duration-300 text-slate-400 hover:text-white">
+            <button id="btn-tab-outlook" onclick="switchTab('outlook')" class="flex items-center px-4 py-1.5 rounded-md text-xs font-semibold tracking-wider transition-all duration-200 text-slate-400 hover:text-white">
                 <span>OUTLOOK</span>
             </button>
-            <button id="btn-tab-reg" onclick="switchTab('reg')" class="flex items-center px-6 py-2 rounded-full text-xs font-semibold tracking-wider transition-all duration-300 text-slate-400 hover:text-white">
+            <button id="btn-tab-reg" onclick="switchTab('reg')" class="flex items-center px-4 py-1.5 rounded-md text-xs font-semibold tracking-wider transition-all duration-200 text-slate-400 hover:text-white">
                 <span>REG TK</span>
             </button>
-            <button id="btn-tab-settings" onclick="switchTab('settings')" class="flex items-center px-6 py-2 rounded-full text-xs font-semibold tracking-wider transition-all duration-300 text-slate-400 hover:text-white">
+            <button id="btn-tab-settings" onclick="switchTab('settings')" class="flex items-center px-4 py-1.5 rounded-md text-xs font-semibold tracking-wider transition-all duration-200 text-slate-400 hover:text-white">
                 <span>CÀI ĐẶT</span>
             </button>
-            <button id="btn-tab-mobile" onclick="switchTab('mobile')" class="flex items-center px-6 py-2 rounded-full text-xs font-semibold tracking-wider transition-all duration-300 text-cyan-400 hover:text-white">
-                <span>📱 MOBILE APP</span>
+            <button id="btn-tab-mobile" onclick="switchTab('mobile')" class="flex items-center px-4 py-1.5 rounded-md text-xs font-semibold tracking-wider transition-all duration-200 text-cyan-400 hover:text-white">
+                <span>MOBILE APP</span>
             </button>
         </div>
 
-
-        <div class="w-[80px]"></div>
+        <div class="w-12"></div>
     </header>
 
     <!-- MAIN APP WRAPPER -->
@@ -335,88 +334,90 @@
              ========================================================================= -->
         <div id="tab-content-mailtm" class="w-full h-full flex overflow-hidden">
             <!-- LEFT PANEL: TÀI KHOẢN -->
-            <aside class="w-80 bg-cyber-card border-r border-cyber-border flex flex-col h-full flex-shrink-0">
-                <div class="p-4 border-b border-cyber-border">
-                    <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Quản lý Tài khoản</h2>
+            <aside class="w-72 bg-cyber-card border-r border-cyber-border flex flex-col h-full flex-shrink-0">
+                <div class="p-3 border-b border-cyber-border">
+                    <h2 class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Quản lý Tài khoản</h2>
                     
-                    <!-- Đăng nhập nhanh -->
-                    <div class="bg-slate-900/40 p-3 rounded-lg border border-cyber-border mb-4">
-                        <label class="block text-[11px] font-bold text-slate-400 mb-1.5 uppercase">Đăng nhập nhanh</label>
-                        <input id="mailtm-quick-paste" type="text" placeholder="Dán Mail|Pass|2FA vào đây..." 
-                               class="w-full text-xs bg-cyber-bg border border-cyber-border text-blue-400 placeholder-slate-500 rounded px-2.5 py-2 focus:outline-none focus:border-blue-500 transition mb-2">
-                        <button onclick="window.tabMailtm.mailtmManualLogin()" class="w-full bg-slate-800 hover:bg-slate-700 text-xs text-white font-semibold py-2 rounded transition flex items-center justify-center">
-                            <span>ĐĂNG NHẬP</span>
-                        </button>
+                    <!-- Đăng nhập nhanh gộp 1 dòng -->
+                    <div class="mb-2">
+                        <div class="flex space-x-1.5">
+                            <input id="mailtm-quick-paste" type="text" placeholder="Dán Mail|Pass|2FA..." 
+                                   class="flex-1 text-xs bg-cyber-bg border border-cyber-border text-blue-400 placeholder-slate-500 rounded px-2.5 py-1.5 focus:outline-none focus:border-blue-500 transition">
+                            <button onclick="window.tabMailtm.mailtmManualLogin()" class="bg-slate-800 hover:bg-slate-700 text-[11px] text-white font-semibold px-3 py-1.5 rounded transition flex-shrink-0">
+                                <span>ĐĂNG NHẬP</span>
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Nút Nhập File & Check -->
-                    <div class="flex space-x-2">
-                        <button onclick="window.tabMailtm.mailtmOpenFile()" class="flex-1 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 text-blue-400 text-xs font-semibold py-2.5 px-3 rounded transition flex items-center justify-center">
+                    <div class="flex space-x-1.5">
+                        <button onclick="window.tabMailtm.mailtmOpenFile()" class="flex-1 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 text-blue-400 text-xs font-semibold py-1.5 px-2 rounded transition flex items-center justify-center">
                             <span>CHỌN FILE</span>
                         </button>
-                        <button onclick="window.tabMailtm.mailtmCheckLive()" class="bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 text-blue-400 text-xs font-semibold py-2.5 px-4 rounded transition flex items-center justify-center">
+                        <button onclick="window.tabMailtm.mailtmCheckLive()" class="bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 text-blue-400 text-xs font-semibold py-1.5 px-3 rounded transition flex items-center justify-center">
                             <span>CHECK KHÁNG</span>
                         </button>
                     </div>
                 </div>
 
                 <!-- Danh sách tài khoản -->
-                <div class="flex-1 overflow-y-auto p-2" id="mailtm-accounts-list">
-                    <div class="text-center py-8 text-slate-500 text-xs">Chưa có tài khoản. Hãy nạp file txt!</div>
+                <div class="flex-1 overflow-y-auto p-1.5" id="mailtm-accounts-list">
+                    <div class="text-center py-6 text-slate-500 text-xs">Chưa có tài khoản. Hãy nạp file txt!</div>
                 </div>
 
                 <!-- Footer của list -->
-                <div class="p-3 bg-slate-900/40 border-t border-cyber-border flex items-center justify-between text-xs text-slate-400">
+                <div class="p-2 bg-slate-900/40 border-t border-cyber-border flex items-center justify-between text-[11px] text-slate-400">
                     <span id="mailtm-count">Số lượng: 0</span>
                     <button onclick="window.tabMailtm.mailtmClearAll()" class="text-red-500 hover:text-red-400 font-medium">Xóa hết</button>
                 </div>
             </aside>
 
             <!-- RIGHT PANEL: CHI TIẾT & HỘP THƯ -->
-            <section class="flex-1 flex flex-col h-full bg-cyber-bg overflow-hidden p-6">
-                <!-- KHUNG THÔNG TIN ACC (INFO BOX) -->
-                <div class="bg-cyber-card border border-cyber-border rounded-xl p-4 mb-6 shadow-md">
-                    <div class="grid grid-cols-5 gap-4 mb-4">
+            <section class="flex-1 flex flex-col h-full bg-cyber-bg overflow-hidden p-3">
+                <!-- KHUNG THÔNG TIN ACC (INFO BOX GỌN GÀNG) -->
+                <div class="bg-cyber-card border border-cyber-border rounded-lg p-2.5 mb-2.5 shadow-sm">
+                    <div class="grid grid-cols-5 gap-2 mb-2">
                         <div class="relative">
-                            <label class="block text-[10px] font-bold text-blue-400 uppercase mb-1">Ghi chú (Note)</label>
+                            <label class="block text-[10px] font-bold text-blue-400 uppercase mb-0.5">Ghi chú (Note)</label>
                             <input id="mailtm-info-note" type="text" placeholder="Đặt ghi chú..."
-                                   class="w-full text-xs font-bold bg-slate-900/50 border border-cyber-border rounded px-3 py-2 text-blue-400 focus:outline-none focus:border-blue-500/50 transition">
+                                   class="w-full text-xs font-bold bg-slate-900/50 border border-cyber-border rounded px-2 py-1 text-blue-400 focus:outline-none focus:border-blue-500/50 transition">
                         </div>
                         <div class="relative">
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Email</label>
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Email</label>
                             <input id="mailtm-info-email" readonly type="text" value="..." onclick="copyField(this, 'Email')"
-                                   class="w-full text-xs font-semibold bg-slate-900/50 border border-cyber-border rounded px-3 py-2 text-white cursor-pointer hover:border-blue-500/50 transition">
+                                   class="w-full text-xs font-semibold bg-slate-900/50 border border-cyber-border rounded px-2 py-1 text-white cursor-pointer hover:border-blue-500/50 transition">
                         </div>
                         <div class="relative">
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Pass Mail</label>
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Pass Mail</label>
                             <input id="mailtm-info-pass" readonly type="text" value="..." onclick="copyField(this, 'Pass Mail')"
-                                   class="w-full text-xs font-semibold bg-slate-900/50 border border-cyber-border rounded px-3 py-2 text-white cursor-pointer hover:border-blue-500/50 transition">
+                                   class="w-full text-xs font-semibold bg-slate-900/50 border border-cyber-border rounded px-2 py-1 text-white cursor-pointer hover:border-blue-500/50 transition">
                         </div>
                         <div class="relative">
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Pass TikTok</label>
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Pass TikTok</label>
                             <input id="mailtm-info-pass2" readonly type="text" value="..." onclick="copyField(this, 'Pass TikTok')"
-                                   class="w-full text-xs font-semibold bg-slate-900/50 border border-cyber-border rounded px-3 py-2 text-white cursor-pointer hover:border-blue-500/50 transition">
+                                   class="w-full text-xs font-semibold bg-slate-900/50 border border-cyber-border rounded px-2 py-1 text-white cursor-pointer hover:border-blue-500/50 transition">
                         </div>
                         <div class="relative flex items-end">
-                            <div class="flex-1 mr-2">
-                                <label class="block text-[10px] font-bold text-red-400 uppercase mb-1">Mã 2FA</label>
+                            <div class="flex-1 mr-1">
+                                <label class="block text-[10px] font-bold text-red-400 uppercase mb-0.5">Mã 2FA</label>
                                 <input id="mailtm-info-2fa" readonly type="text" value="..." onclick="copyField(this, '2FA Code')"
-                                       class="w-full text-xs font-bold bg-red-950/20 border border-red-500/20 rounded px-3 py-2 text-red-400 cursor-pointer hover:border-red-500/50 transition">
+                                       class="w-full text-xs font-bold bg-red-950/20 border border-red-500/20 rounded px-2 py-1 text-red-400 cursor-pointer hover:border-red-500/50 transition">
                             </div>
-                            <button onclick="mailtmRefresh2FA()" class="bg-slate-800 hover:bg-slate-700 border border-cyber-border p-2 rounded text-slate-300 hover:text-white transition">
-                                <i class="fa-solid fa-rotate-right"></i>
+                            <button onclick="mailtmRefresh2FA()" class="bg-slate-800 hover:bg-slate-700 border border-cyber-border p-1 rounded text-slate-300 hover:text-white transition" title="Làm mới 2FA">
+                                <i class="fa-solid fa-rotate-right text-xs"></i>
                             </button>
                         </div>
                     </div>
                     
-                    <div class="space-y-2">
-                        <button onclick="window.tabMailtm.mailtmRunSelenium()" class="w-full bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white tracking-widest py-3.5 rounded-xl transition shadow-lg flex items-center justify-center">
-                            <span>ĐĂNG NHẬP NHANH VÀO TIKTOK ADS</span>
+                    <!-- Dòng thao tác gộp Đăng nhập & Bypass Smart+ -->
+                    <div class="flex items-center space-x-2">
+                        <button onclick="window.tabMailtm.mailtmRunSelenium()" class="flex-1 bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white tracking-wider py-1.5 px-3 rounded-lg transition shadow-sm flex items-center justify-center">
+                            <span>ĐĂNG NHẬP VÀO TIKTOK ADS</span>
                         </button>
-                        <div class="flex items-center justify-between px-3 py-2 bg-cyber-bg/70 border border-cyber-border rounded-lg">
-                            <span class="text-[11px] font-semibold text-slate-300">Bypass Smart+ (Thủ công)</span>
+                        <div class="flex items-center space-x-2 px-2.5 py-1 bg-cyber-bg/70 border border-cyber-border rounded-lg flex-shrink-0">
+                            <span class="text-[11px] font-semibold text-slate-300">Bypass Smart+</span>
                             <button id="mailtm-btn-smartplus" onclick="window.tabMailtm.toggleSmartPlus()" 
-                                    class="px-2.5 py-0.5 rounded text-[10px] font-bold tracking-wider transition border bg-emerald-500/20 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/30">
+                                    class="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider transition border bg-emerald-500/20 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/30">
                                 <span id="mailtm-smartplus-status">BẬT</span>
                             </button>
                         </div>
@@ -424,31 +425,29 @@
                 </div>
 
                 <!-- CHIA ĐÔI INBOX VÀ NỘI DUNG (VERTICAL DIVISION) -->
-                <div class="flex-1 flex space-x-6 overflow-hidden">
+                <div class="flex-1 flex space-x-3 overflow-hidden">
                     <!-- HỘP THƯ (INBOX LIST) -->
-                    <div class="w-2/5 bg-cyber-card border border-cyber-border rounded-xl flex flex-col overflow-hidden shadow-md">
-                        <div class="p-4 border-b border-cyber-border flex items-center justify-between">
-                            <div class="flex items-center">
-                                <h3 class="text-xs font-bold text-white uppercase tracking-wider">Hộp Thư Đến</h3>
-                            </div>
-                            <button onclick="window.tabMailtm.mailtmRefreshInbox()" class="text-[11px] bg-slate-800 hover:bg-slate-700 px-3 py-1 rounded border border-cyber-border text-slate-300 font-medium transition-colors">
+                    <div class="w-2/5 bg-cyber-card border border-cyber-border rounded-lg flex flex-col overflow-hidden shadow-sm">
+                        <div class="px-3 py-1.5 border-b border-cyber-border flex items-center justify-between">
+                            <h3 class="text-xs font-bold text-white uppercase tracking-wider">Hộp Thư Đến</h3>
+                            <button onclick="window.tabMailtm.mailtmRefreshInbox()" class="text-[10px] bg-slate-800 hover:bg-slate-700 px-2.5 py-0.5 rounded border border-cyber-border text-slate-300 font-medium transition-colors">
                                 <span>Làm mới</span>
                             </button>
                         </div>
-                        <div class="flex-1 overflow-y-auto p-2" id="mailtm-inbox-list">
-                            <div class="text-center py-12 text-slate-500 text-xs">Hãy chọn tài khoản để xem hộp thư.</div>
+                        <div class="flex-1 overflow-y-auto p-1.5" id="mailtm-inbox-list">
+                            <div class="text-center py-8 text-slate-500 text-xs">Hãy chọn tài khoản để xem hộp thư.</div>
                         </div>
                     </div>
 
                     <!-- NỘI DUNG THƯ CHI TIẾT -->
-                    <div class="w-3/5 bg-cyber-card border border-cyber-border rounded-xl flex flex-col overflow-hidden shadow-md">
+                    <div class="w-3/5 bg-cyber-card border border-cyber-border rounded-lg flex flex-col overflow-hidden shadow-sm">
                         <!-- Header Content -->
-                        <div class="p-4 border-b border-cyber-border flex items-center justify-between">
+                        <div class="px-3 py-1.5 border-b border-cyber-border flex items-center justify-between">
                             <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Nội Dung Chi Tiết</span>
                         </div>
                         
                         <!-- Area Reader -->
-                        <div class="flex-1 p-4 overflow-y-auto relative" id="mail-reader-container">
+                        <div class="flex-1 p-2.5 overflow-y-auto relative" id="mail-reader-container">
                             <!-- Iframe HTML view (Render 100% css/layout natively!) -->
                             <iframe id="email-html-content" class="w-full h-full bg-white rounded border-0 hidden"></iframe>
                             
@@ -467,82 +466,84 @@
              ========================================================================= -->
         <div id="tab-content-outlook" class="w-full h-full flex overflow-hidden hidden">
             <!-- LEFT PANEL: TÀI KHOẢN -->
-            <aside class="w-80 bg-cyber-card border-r border-cyber-border flex flex-col h-full flex-shrink-0">
-                <div class="p-4 border-b border-cyber-border">
-                    <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Quản lý List Outlook</h2>
+            <aside class="w-72 bg-cyber-card border-r border-cyber-border flex flex-col h-full flex-shrink-0">
+                <div class="p-3 border-b border-cyber-border">
+                    <h2 class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Quản lý List Outlook</h2>
                     
-                    <!-- Nhập nhanh -->
-                    <div class="bg-slate-900/40 p-3 rounded-lg border border-cyber-border mb-4">
-                        <label class="block text-[11px] font-bold text-slate-400 mb-1.5 uppercase">Thêm nhanh</label>
-                        <input id="outlook-quick-paste" type="text" placeholder="Dán định dạng Account vào..." 
-                               class="w-full text-xs bg-cyber-bg border border-cyber-border text-blue-400 placeholder-slate-500 rounded px-2.5 py-2 focus:outline-none focus:border-blue-500 transition mb-2">
-                        <button onclick="window.tabOutlook.outlookAddAccount()" class="w-full bg-slate-800 hover:bg-slate-700 text-xs text-white font-semibold py-2 rounded transition flex items-center justify-center">
-                            <span>THÊM & CHECK</span>
-                        </button>
+                    <!-- Nhập nhanh gộp 1 dòng -->
+                    <div class="mb-2">
+                        <div class="flex space-x-1.5">
+                            <input id="outlook-quick-paste" type="text" placeholder="Dán định dạng Account..." 
+                                   class="flex-1 text-xs bg-cyber-bg border border-cyber-border text-blue-400 placeholder-slate-500 rounded px-2.5 py-1.5 focus:outline-none focus:border-blue-500 transition">
+                            <button onclick="window.tabOutlook.outlookAddAccount()" class="bg-slate-800 hover:bg-slate-700 text-[11px] text-white font-semibold px-2.5 py-1.5 rounded transition flex-shrink-0">
+                                <span>THÊM</span>
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Nút Nhập File & Xóa -->
-                    <div class="flex space-x-2">
-                        <button onclick="window.tabOutlook.outlookOpenFile()" class="flex-1 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 text-blue-400 text-xs font-semibold py-2.5 px-3 rounded transition flex items-center justify-center">
+                    <div class="flex space-x-1.5">
+                        <button onclick="window.tabOutlook.outlookOpenFile()" class="flex-1 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 text-blue-400 text-xs font-semibold py-1.5 px-2 rounded transition flex items-center justify-center">
                             <span>NHẬP FILE</span>
                         </button>
-                        <button onclick="window.tabOutlook.outlookClearAll()" class="bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-400 text-xs font-semibold py-2.5 px-4 rounded transition flex items-center justify-center">
+                        <button onclick="window.tabOutlook.outlookClearAll()" class="bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-400 text-xs font-semibold py-1.5 px-3 rounded transition flex items-center justify-center">
                             <span>XÓA LIST</span>
                         </button>
                     </div>
                 </div>
 
                 <!-- Danh sách tài khoản -->
-                <div class="flex-1 overflow-y-auto p-2" id="outlook-accounts-list">
-                    <div class="text-center py-8 text-slate-500 text-xs">Chưa có tài khoản. Hãy nạp file txt!</div>
+                <div class="flex-1 overflow-y-auto p-1.5" id="outlook-accounts-list">
+                    <div class="text-center py-6 text-slate-500 text-xs">Chưa có tài khoản. Hãy nạp file txt!</div>
                 </div>
 
                 <!-- Footer của list -->
-                <div class="p-3 bg-slate-900/40 border-t border-cyber-border flex items-center justify-between text-xs text-slate-400">
+                <div class="p-2 bg-slate-900/40 border-t border-cyber-border flex items-center justify-between text-[11px] text-slate-400">
                     <span id="outlook-count">Số lượng: 0</span>
                 </div>
             </aside>
 
             <!-- RIGHT PANEL: CHI TIẾT & HỘP THƯ -->
-            <section class="flex-1 flex flex-col h-full bg-cyber-bg overflow-hidden p-6">
-                <!-- KHUNG THÔNG TIN ACC (INFO BOX) -->
-                <div class="bg-cyber-card border border-cyber-border rounded-xl p-4 mb-6 shadow-md">
-                    <div class="grid grid-cols-5 gap-4 mb-4">
+            <section class="flex-1 flex flex-col h-full bg-cyber-bg overflow-hidden p-3">
+                <!-- KHUNG THÔNG TIN ACC (INFO BOX GỌN GÀNG) -->
+                <div class="bg-cyber-card border border-cyber-border rounded-lg p-2.5 mb-2.5 shadow-sm">
+                    <div class="grid grid-cols-5 gap-2 mb-2">
                         <div class="relative">
-                            <label class="block text-[10px] font-bold text-blue-400 uppercase mb-1">Ghi chú (Note)</label>
+                            <label class="block text-[10px] font-bold text-blue-400 uppercase mb-0.5">Ghi chú (Note)</label>
                             <input id="outlook-info-note" type="text" placeholder="Đặt ghi chú..."
-                                   class="w-full text-xs font-bold bg-slate-900/50 border border-cyber-border rounded px-3 py-2 text-blue-400 focus:outline-none focus:border-blue-500/50 transition">
+                                   class="w-full text-xs font-bold bg-slate-900/50 border border-cyber-border rounded px-2 py-1 text-blue-400 focus:outline-none focus:border-blue-500/50 transition">
                         </div>
                         <div class="relative">
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">User/Mail</label>
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">User/Mail</label>
                             <input id="outlook-info-user" readonly type="text" value="..." onclick="copyField(this, 'Username')"
-                                   class="w-full text-xs font-semibold bg-slate-900/50 border border-cyber-border rounded px-3 py-2 text-white cursor-pointer hover:border-blue-500/50 transition">
+                                   class="w-full text-xs font-semibold bg-slate-900/50 border border-cyber-border rounded px-2 py-1 text-white cursor-pointer hover:border-blue-500/50 transition">
                         </div>
                         <div class="relative">
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Email Outlook</label>
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Email Outlook</label>
                             <input id="outlook-info-email" readonly type="text" value="..." onclick="copyField(this, 'Email')"
-                                   class="w-full text-xs font-semibold bg-slate-900/50 border border-cyber-border rounded px-3 py-2 text-white cursor-pointer hover:border-blue-500/50 transition">
+                                   class="w-full text-xs font-semibold bg-slate-900/50 border border-cyber-border rounded px-2 py-1 text-white cursor-pointer hover:border-blue-500/50 transition">
                         </div>
                         <div class="relative">
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Pass TikTok</label>
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Pass TikTok</label>
                             <input id="outlook-info-pass-tt" readonly type="text" value="..." onclick="copyField(this, 'Pass TikTok')"
-                                   class="w-full text-xs font-semibold bg-slate-900/50 border border-cyber-border rounded px-3 py-2 text-white cursor-pointer hover:border-blue-500/50 transition">
+                                   class="w-full text-xs font-semibold bg-slate-900/50 border border-cyber-border rounded px-2 py-1 text-white cursor-pointer hover:border-blue-500/50 transition">
                         </div>
                         <div class="relative">
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Pass Outlook</label>
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Pass Outlook</label>
                             <input id="outlook-info-pass-mail" readonly type="text" value="..." onclick="copyField(this, 'Pass Outlook')"
-                                   class="w-full text-xs font-semibold bg-slate-900/50 border border-cyber-border rounded px-3 py-2 text-white cursor-pointer hover:border-blue-500/50 transition">
+                                   class="w-full text-xs font-semibold bg-slate-900/50 border border-cyber-border rounded px-2 py-1 text-white cursor-pointer hover:border-blue-500/50 transition">
                         </div>
                     </div>
 
-                    <div class="space-y-2">
-                        <button onclick="window.tabOutlook.outlookRunSelenium()" class="w-full bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white tracking-widest py-3.5 rounded-xl transition shadow-lg flex items-center justify-center">
+                    <!-- Dòng thao tác gộp Đăng nhập & Bypass Smart+ -->
+                    <div class="flex items-center space-x-2">
+                        <button onclick="window.tabOutlook.outlookRunSelenium()" class="flex-1 bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white tracking-wider py-1.5 px-3 rounded-lg transition shadow-sm flex items-center justify-center">
                             <span>MỞ TRÌNH DUYỆT ĐĂNG NHẬP</span>
                         </button>
-                        <div class="flex items-center justify-between px-3 py-2 bg-cyber-bg/70 border border-cyber-border rounded-lg">
-                            <span class="text-[11px] font-semibold text-slate-300">Bypass Smart+ (Thủ công)</span>
+                        <div class="flex items-center space-x-2 px-2.5 py-1 bg-cyber-bg/70 border border-cyber-border rounded-lg flex-shrink-0">
+                            <span class="text-[11px] font-semibold text-slate-300">Bypass Smart+</span>
                             <button id="outlook-btn-smartplus" onclick="window.tabOutlook.toggleSmartPlus()" 
-                                    class="px-2.5 py-0.5 rounded text-[10px] font-bold tracking-wider transition border bg-emerald-500/20 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/30">
+                                    class="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider transition border bg-emerald-500/20 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/30">
                                 <span id="outlook-smartplus-status">BẬT</span>
                             </button>
                         </div>
@@ -550,31 +551,29 @@
                 </div>
 
                 <!-- CHIA ĐÔI INBOX VÀ NỘI DUNG (VERTICAL DIVISION) -->
-                <div class="flex-1 flex space-x-6 overflow-hidden">
+                <div class="flex-1 flex space-x-3 overflow-hidden">
                     <!-- HỘP THƯ (INBOX LIST) -->
-                    <div class="w-2/5 bg-cyber-card border border-cyber-border rounded-xl flex flex-col overflow-hidden shadow-md">
-                        <div class="p-4 border-b border-cyber-border flex items-center justify-between">
-                            <div class="flex items-center">
-                                <h3 class="text-xs font-bold text-white uppercase tracking-wider">Hộp Thư Đến</h3>
-                            </div>
-                            <button onclick="window.tabOutlook.outlookRefreshInbox()" class="text-[11px] bg-slate-800 hover:bg-slate-700 px-3 py-1 rounded border border-cyber-border text-slate-300 font-medium transition-colors">
+                    <div class="w-2/5 bg-cyber-card border border-cyber-border rounded-lg flex flex-col overflow-hidden shadow-sm">
+                        <div class="px-3 py-1.5 border-b border-cyber-border flex items-center justify-between">
+                            <h3 class="text-xs font-bold text-white uppercase tracking-wider">Hộp Thư Đến</h3>
+                            <button onclick="window.tabOutlook.outlookRefreshInbox()" class="text-[10px] bg-slate-800 hover:bg-slate-700 px-2.5 py-0.5 rounded border border-cyber-border text-slate-300 font-medium transition-colors">
                                 <span>Làm mới</span>
                             </button>
                         </div>
-                        <div class="flex-1 overflow-y-auto p-2" id="outlook-inbox-list">
-                            <div class="text-center py-12 text-slate-500 text-xs">Hãy chọn tài khoản để xem hộp thư.</div>
+                        <div class="flex-1 overflow-y-auto p-1.5" id="outlook-inbox-list">
+                            <div class="text-center py-8 text-slate-500 text-xs">Hãy chọn tài khoản để xem hộp thư.</div>
                         </div>
                     </div>
 
                     <!-- NỘI DUNG THƯ CHI TIẾT -->
-                    <div class="w-3/5 bg-cyber-card border border-cyber-border rounded-xl flex flex-col overflow-hidden shadow-md">
+                    <div class="w-3/5 bg-cyber-card border border-cyber-border rounded-lg flex flex-col overflow-hidden shadow-sm">
                         <!-- Header Content -->
-                        <div class="p-4 border-b border-cyber-border flex items-center justify-between">
+                        <div class="px-3 py-1.5 border-b border-cyber-border flex items-center justify-between">
                             <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Nội Dung Chi Tiết</span>
                         </div>
                         
                         <!-- Area Reader -->
-                        <div class="flex-1 p-4 overflow-y-auto relative" id="outlook-reader-container">
+                        <div class="flex-1 p-2.5 overflow-y-auto relative" id="outlook-reader-container">
                             <pre id="outlook-text-content" class="text-xs text-slate-300 font-mono whitespace-pre-wrap leading-relaxed w-full h-full"></pre>
                             
                             <div id="outlook-reader-empty" class="absolute inset-0 flex items-center justify-center text-slate-500 text-xs">
@@ -591,26 +590,26 @@
              ========================================================================= -->
         <div id="tab-content-reg" class="w-full h-full flex overflow-hidden hidden">
             <!-- LEFT PANEL: CẤU HÌNH -->
-            <aside class="w-80 bg-cyber-card border-r border-cyber-border flex flex-col h-full flex-shrink-0">
-                <div class="p-4 border-b border-cyber-border">
-                    <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">Cấu hình Reg</h2>
+            <aside class="w-72 bg-cyber-card border-r border-cyber-border flex flex-col h-full flex-shrink-0">
+                <div class="p-3 border-b border-cyber-border">
+                    <h2 class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2.5">Cấu hình Reg</h2>
 
-                    <div class="space-y-3">
+                    <div class="space-y-2">
                         <div>
-                            <label class="block text-[11px] font-bold text-slate-400 mb-1 uppercase">Mật khẩu mặc định</label>
+                            <label class="block text-[10px] font-bold text-slate-400 mb-0.5 uppercase">Mật khẩu mặc định</label>
                             <input type="text" id="reg-pass" placeholder="Ngẫu nhiên nếu để trống"
-                                   class="w-full text-xs bg-cyber-bg border border-cyber-border text-blue-400 placeholder-slate-500 rounded px-2.5 py-2 focus:outline-none focus:border-blue-500 transition">
+                                   class="w-full text-xs bg-cyber-bg border border-cyber-border text-blue-400 placeholder-slate-500 rounded px-2.5 py-1.5 focus:outline-none focus:border-blue-500 transition">
                         </div>
                         <div>
-                            <label class="block text-[11px] font-bold text-slate-400 mb-1 uppercase">Số lượng tài khoản</label>
+                            <label class="block text-[10px] font-bold text-slate-400 mb-0.5 uppercase">Số lượng tài khoản</label>
                             <input type="number" id="reg-qty" value="1" min="1"
-                                   class="w-full text-xs bg-cyber-bg border border-cyber-border text-white rounded px-2.5 py-2 focus:outline-none focus:border-blue-500 transition">
+                                   class="w-full text-xs bg-cyber-bg border border-cyber-border text-white rounded px-2.5 py-1.5 focus:outline-none focus:border-blue-500 transition">
                         </div>
 
-                        <div class="space-y-2 pt-1">
+                        <div class="space-y-1.5 pt-1">
                             <label class="flex items-center space-x-2 cursor-pointer select-none">
                                 <input type="checkbox" id="reg-only-mail" class="accent-emerald-500">
-                                <span class="text-xs text-slate-300">Chỉ đăng ký Mail.tm (không mở browser)</span>
+                                <span class="text-xs text-slate-300">Chỉ reg Mail.tm (không mở browser)</span>
                             </label>
                             <label class="flex items-center space-x-2 cursor-pointer select-none">
                                 <input type="checkbox" id="reg-auto-close" checked class="accent-emerald-500">
@@ -620,48 +619,44 @@
                     </div>
                 </div>
 
-                <div class="p-4 space-y-2 border-b border-cyber-border">
+                <div class="p-2.5 flex space-x-2 border-b border-cyber-border">
                     <button id="btn-run-reg" onclick="window.tabReg.startReg()"
-                            class="w-full bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white tracking-widest py-3.5 rounded-xl transition shadow-lg flex items-center justify-center">
+                            class="flex-1 bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white tracking-wider py-1.5 px-3 rounded-lg transition shadow-sm flex items-center justify-center">
                         <span>BẮT ĐẦU REG</span>
                     </button>
                     <button id="btn-stop-reg" onclick="window.tabReg.stopReg()" disabled
-                            class="w-full bg-red-600 hover:bg-red-500 disabled:opacity-40 disabled:cursor-not-allowed text-xs font-bold text-white tracking-widest py-2.5 rounded-xl transition flex items-center justify-center">
+                            class="bg-red-600 hover:bg-red-500 disabled:opacity-40 disabled:cursor-not-allowed text-xs font-bold text-white tracking-wider py-1.5 px-4 rounded-lg transition flex items-center justify-center">
                         <span>DỪNG</span>
                     </button>
                 </div>
 
                 <!-- Nhật ký hoạt động -->
-                <div class="flex-1 flex flex-col p-4 overflow-hidden border-t border-cyber-border">
-                    <div class="flex items-center justify-between mb-2">
-                        <div class="flex items-center">
-                            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Nhật ký hoạt động</span>
-                        </div>
+                <div class="flex-1 flex flex-col p-2.5 overflow-hidden">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Nhật ký hoạt động</span>
                         <button onclick="document.getElementById('reg-log').innerHTML=''"
                                 class="text-[10px] bg-slate-800 hover:bg-slate-700 px-2 py-0.5 rounded border border-cyber-border text-slate-300">
                             Xóa log
                         </button>
                     </div>
-                    <div id="reg-log" class="flex-1 overflow-y-auto p-3 font-mono text-[11px] space-y-1 bg-cyber-bg/60 border border-cyber-border rounded-lg leading-normal">
+                    <div id="reg-log" class="flex-1 overflow-y-auto p-2 font-mono text-[11px] space-y-1 bg-cyber-bg/60 border border-cyber-border rounded-lg leading-normal">
                         <div class="text-slate-500">[System] Sẵn sàng...</div>
                     </div>
                 </div>
             </aside>
 
             <!-- RIGHT PANEL: KẾT QUẢ -->
-            <section class="flex-1 flex flex-col h-full bg-cyber-bg overflow-hidden p-6">
-                <div class="bg-cyber-card border border-cyber-border rounded-xl flex flex-col flex-1 overflow-hidden shadow-md">
-                    <div class="p-4 border-b border-cyber-border flex items-center justify-between">
-                        <div class="flex items-center">
-                            <h3 class="text-xs font-bold text-white uppercase tracking-wider">Kết quả xuất ra (email|password|2fa_secret)</h3>
-                        </div>
+            <section class="flex-1 flex flex-col h-full bg-cyber-bg overflow-hidden p-3">
+                <div class="bg-cyber-card border border-cyber-border rounded-lg flex flex-col flex-1 overflow-hidden shadow-sm">
+                    <div class="px-3 py-1.5 border-b border-cyber-border flex items-center justify-between">
+                        <h3 class="text-xs font-bold text-white uppercase tracking-wider">Kết quả xuất ra (email|password|2fa_secret)</h3>
                         <button onclick="window.tabReg.exportResults()"
-                                class="text-xs bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 text-blue-400 px-3 py-1.5 rounded flex items-center justify-center transition font-semibold">
+                                class="text-xs bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 text-blue-400 px-2.5 py-1 rounded flex items-center justify-center transition font-semibold">
                             <span>XUẤT FILE TXT</span>
                         </button>
                     </div>
                     <textarea id="reg-result" readonly placeholder="Kết quả tài khoản đăng ký thành công sẽ xuất hiện tại đây..."
-                              class="flex-1 resize-none text-xs font-mono bg-cyber-bg/30 border-0 text-emerald-400 p-4 focus:outline-none leading-relaxed"></textarea>
+                              class="flex-1 resize-none text-xs font-mono bg-cyber-bg/30 border-0 text-emerald-400 p-3 focus:outline-none leading-relaxed"></textarea>
                 </div>
             </section>
         </div>
@@ -669,32 +664,32 @@
         <!-- =========================================================================
              TAB 4: SETTINGS CONTENT
              ========================================================================= -->
-        <div id="tab-content-settings" class="w-full h-full flex flex-col bg-cyber-bg overflow-y-auto p-6 hidden">
-            <div class="max-w-xl mx-auto w-full space-y-6">
+        <div id="tab-content-settings" class="w-full h-full flex flex-col bg-cyber-bg overflow-y-auto p-4 hidden">
+            <div class="max-w-xl mx-auto w-full space-y-3.5">
                 <!-- Title & Header -->
-                <div class="pb-4 border-b border-cyber-border">
-                    <h2 class="text-lg font-extrabold text-white tracking-wider uppercase">Cấu hình Hệ thống</h2>
-                    <p class="text-[11px] text-slate-400 mt-1">Thiết lập Proxy chung, giao diện và chế độ khởi chạy ứng dụng</p>
+                <div class="pb-2.5 border-b border-cyber-border">
+                    <h2 class="text-base font-extrabold text-white tracking-wider uppercase">Cấu hình Hệ thống</h2>
+                    <p class="text-[11px] text-slate-400 mt-0.5">Thiết lập Proxy chung, giao diện và chế độ khởi chạy ứng dụng</p>
                 </div>
 
                 <!-- CARD 1: CẤU HÌNH TRÌNH DUYỆT & GIAO DIỆN -->
-                <div class="bg-cyber-card border border-cyber-border rounded-xl p-5 shadow-md space-y-4">
-                    <div class="flex items-center pb-3 border-b border-cyber-border/50">
+                <div class="bg-cyber-card border border-cyber-border rounded-lg p-3.5 shadow-sm space-y-3">
+                    <div class="flex items-center pb-2 border-b border-cyber-border/50">
                         <h3 class="text-xs font-bold text-white uppercase tracking-wider">Cài đặt chung</h3>
                     </div>
 
-                    <div class="space-y-4">
+                    <div class="space-y-3">
                         <div>
                             <label class="block text-xs font-semibold text-slate-400 mb-1">Cấu hình Proxy chung (HTTP / Socks5)</label>
                             <input type="text" id="settings-proxy" placeholder="Ví dụ: 127.0.0.1:8080 hoặc host:port:user:pass"
-                                   class="w-full text-xs bg-cyber-bg border border-cyber-border text-white rounded px-3 py-2 focus:outline-none focus:border-blue-500 transition">
-                            <p class="text-[10px] text-slate-500 mt-1">Dùng chung cho cả luồng Selenium (Login) và Playwright (Reg).</p>
+                                   class="w-full text-xs bg-cyber-bg border border-cyber-border text-white rounded px-2.5 py-1.5 focus:outline-none focus:border-blue-500 transition">
+                            <p class="text-[10px] text-slate-500 mt-0.5">Dùng chung cho cả luồng Selenium (Login) và Playwright (Reg).</p>
                         </div>
 
                         <div>
                             <label class="block text-xs font-semibold text-slate-400 mb-1">Chủ đề Giao diện</label>
                             <select id="settings-theme" onchange="window.tabSettings.previewTheme(this.value)"
-                                    class="w-full text-xs bg-cyber-bg border border-cyber-border text-white rounded px-3 py-2 focus:outline-none focus:border-blue-500 transition">
+                                    class="w-full text-xs bg-cyber-bg border border-cyber-border text-white rounded px-2.5 py-1.5 focus:outline-none focus:border-blue-500 transition">
                                 <option value="dark" class="bg-cyber-card">Giao diện Tối (Cyberpunk Dark)</option>
                                 <option value="light" class="bg-cyber-card">Giao diện Sáng (Elegant Light)</option>
                             </select>
@@ -729,13 +724,13 @@
                 </div>
 
                 <!-- CARD 2: ĐỒNG BỘ HÓA CLOUDFLARE D1 -->
-                <div class="bg-cyber-card border border-cyber-border rounded-xl p-5 shadow-md space-y-4">
-                    <div class="flex items-center pb-3 border-b border-cyber-border/50">
+                <div class="bg-cyber-card border border-cyber-border rounded-lg p-3.5 shadow-sm space-y-3">
+                    <div class="flex items-center pb-2 border-b border-cyber-border/50">
                         <h3 class="text-xs font-bold text-white uppercase tracking-wider">Đồng bộ hóa dữ liệu (Cloudflare D1)</h3>
                     </div>
 
-                    <div class="space-y-4">
-                        <div class="pt-2 space-y-2">
+                    <div class="space-y-3">
+                        <div class="pt-1">
                             <label class="flex items-center space-x-2.5 cursor-pointer select-none">
                                 <input type="checkbox" id="settings-cf-sync" class="w-4 h-4 rounded accent-blue-600 bg-cyber-bg border-cyber-border">
                                 <div>
@@ -748,25 +743,25 @@
                         <div>
                             <label class="block text-xs font-semibold text-slate-400 mb-1">Cloudflare Worker API URL</label>
                             <input type="text" id="settings-cf-url" placeholder="https://xxx.workers.dev"
-                                   class="w-full text-xs bg-cyber-bg border border-cyber-border text-white rounded px-3 py-2 focus:outline-none focus:border-blue-500 transition">
-                            <p class="text-[10px] text-slate-500 mt-1">Đường dẫn URL ứng dụng Worker đã deploy của bạn.</p>
+                                   class="w-full text-xs bg-cyber-bg border border-cyber-border text-white rounded px-2.5 py-1.5 focus:outline-none focus:border-blue-500 transition">
+                            <p class="text-[10px] text-slate-500 mt-0.5">Đường dẫn URL ứng dụng Worker đã deploy của bạn.</p>
                         </div>
 
                         <div>
                             <label class="block text-xs font-semibold text-slate-400 mb-1">Secret API Key (Mật mã kết nối)</label>
                             <input type="text" id="settings-cf-key" placeholder="Nhập API Key bạn tự đặt..."
-                                   class="w-full text-xs bg-cyber-bg border border-cyber-border text-white rounded px-3 py-2 focus:outline-none focus:border-blue-500 transition">
-                            <p class="text-[10px] text-slate-500 mt-1">Khóa xác thực gửi trong Header Authorization để bảo mật API.</p>
+                                   class="w-full text-xs bg-cyber-bg border border-cyber-border text-white rounded px-2.5 py-1.5 focus:outline-none focus:border-blue-500 transition">
+                            <p class="text-[10px] text-slate-500 mt-0.5">Khóa xác thực gửi trong Header Authorization để bảo mật API.</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- SAVE ACTION -->
-                <div class="bg-cyber-card border border-cyber-border rounded-xl p-4 flex items-center justify-between shadow-md">
+                <div class="bg-cyber-card border border-cyber-border rounded-lg p-3 flex items-center justify-between shadow-sm">
                     <div class="text-[11px] text-slate-400">
                         Cấu hình sẽ tự động lưu và áp dụng cho các luồng tiếp theo.
                     </div>
-                    <button onclick="window.tabSettings.saveSettings()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs py-3 px-6 rounded-xl transition-all duration-300 shadow-md shadow-blue-600/20 tracking-wider uppercase">
+                    <button onclick="window.tabSettings.saveSettings()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs py-2 px-5 rounded-lg transition-all duration-200 shadow-sm shadow-blue-600/20 tracking-wider uppercase">
                         <span>LƯU CÀI ĐẶT</span>
                     </button>
                 </div>
@@ -776,33 +771,32 @@
         <!-- =========================================================================
              TAB 5: MOBILE APP SERVER & QR CODE
              ========================================================================= -->
-        <div id="tab-content-mobile" class="w-full h-full flex flex-col overflow-y-auto p-6 hidden">
-            <div class="max-w-4xl mx-auto w-full space-y-6">
+        <div id="tab-content-mobile" class="w-full h-full flex flex-col overflow-y-auto p-4 hidden">
+            <div class="max-w-4xl mx-auto w-full space-y-4">
                 <!-- HEADER BANNER -->
-                <div class="bg-gradient-to-r from-slate-900 via-indigo-950/40 to-slate-900 border border-cyber-border rounded-2xl p-6 shadow-xl flex items-center justify-between">
+                <div class="bg-gradient-to-r from-slate-900 via-indigo-950/40 to-slate-900 border border-cyber-border rounded-xl p-4 shadow-md flex items-center justify-between">
                     <div>
-                        <div class="flex items-center space-x-3 mb-2">
-                            <span class="text-2xl">📱</span>
-                            <h2 class="text-lg font-black text-white tracking-wide">TIKTOK ADS MOBILE APP</h2>
-                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">PWA NATIVE</span>
+                        <div class="flex items-center space-x-2.5 mb-1.5">
+                            <h2 class="text-base font-black text-white tracking-wide">TIKTOK ADS MOBILE APP</h2>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">PWA NATIVE</span>
                         </div>
                         <p class="text-xs text-slate-400 max-w-xl leading-relaxed">
-                            Khắc phục hạn chế giao diện web TikTok Ads trên điện thoại. Quét mã QR bên dưới bằng Camera điện thoại (cùng mạng Wi-Fi) để truy cập ứng dụng di động siêu tốc: kiểm tra số dư, trạng thái tài khoản, bật/tắt chiến dịch và lấy mã 2FA 1 chạm.
+                            Quét mã QR bằng Camera điện thoại (cùng mạng Wi-Fi) để truy cập ứng dụng di động: kiểm tra số dư, trạng thái tài khoản, bật/tắt chiến dịch và lấy mã 2FA nhanh.
                         </p>
                     </div>
 
                     <!-- Server Status Indicator -->
-                    <div class="bg-slate-900/80 border border-cyber-border rounded-xl p-4 flex flex-col items-end flex-shrink-0">
-                        <div class="flex items-center space-x-2 mb-2">
-                            <span id="mobile-status-badge" class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <div class="bg-slate-900/80 border border-cyber-border rounded-lg p-3 flex flex-col items-end flex-shrink-0">
+                        <div class="flex items-center space-x-2 mb-1.5">
+                            <span id="mobile-status-badge" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                             <span id="mobile-status-text" class="text-xs font-bold text-emerald-400">Đang chạy (Port 3888)</span>
                         </div>
-                        <div class="flex space-x-2">
-                            <button onclick="window.tabMobile.restartServer()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-[11px] font-semibold transition flex items-center space-x-1">
+                        <div class="flex space-x-1.5">
+                            <button onclick="window.tabMobile.restartServer()" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px] font-semibold transition flex items-center space-x-1">
                                 <i class="fas fa-redo-alt text-[10px]"></i>
                                 <span>Khởi động lại</span>
                             </button>
-                            <button onclick="window.tabMobile.openInBrowser()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-[11px] font-semibold transition flex items-center space-x-1">
+                            <button onclick="window.tabMobile.openInBrowser()" class="px-2.5 py-1 bg-blue-600 hover:bg-blue-500 text-white rounded text-[11px] font-semibold transition flex items-center space-x-1">
                                 <i class="fas fa-external-link-alt text-[10px]"></i>
                                 <span>Mở trên PC</span>
                             </button>
@@ -811,56 +805,55 @@
                 </div>
 
                 <!-- MAIN QR & CONNECTION GRID -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- LEFT: QR CODE CARD -->
-                    <div class="bg-cyber-card border border-cyber-border rounded-2xl p-6 shadow-md flex flex-col items-center justify-center text-center">
-                        <div class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-4">
+                    <div class="bg-cyber-card border border-cyber-border rounded-xl p-4 shadow-sm flex flex-col items-center justify-center text-center">
+                        <div class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">
                             Quét mã bằng Camera điện thoại
                         </div>
-                        <div class="p-4 bg-white rounded-2xl shadow-lg border-2 border-cyan-500/30 mb-4 inline-block">
-                            <img id="mobile-qr-image" src="" alt="Mobile QR Code" class="w-56 h-56 object-contain" />
+                        <div class="p-3 bg-white rounded-xl shadow-md border border-cyan-500/30 mb-3 inline-block">
+                            <img id="mobile-qr-image" src="" alt="Mobile QR Code" class="w-44 h-44 object-contain" />
                         </div>
-                        <p class="text-xs text-slate-400 max-w-xs">
-                            Mở ứng dụng Máy ảnh (Camera) trên iPhone hoặc Android, hướng vào mã QR để mở trang Web App di động ngay lập tức.
+                        <p class="text-[11px] text-slate-400 max-w-xs">
+                            Mở Camera điện thoại, hướng vào mã QR để mở trang Web App di động ngay lập tức.
                         </p>
                     </div>
 
                     <!-- RIGHT: DIRECT URL & GUIDE -->
-                    <div class="space-y-4">
+                    <div class="space-y-3">
                         <!-- Direct Link Box -->
-                        <div class="bg-cyber-card border border-cyber-border rounded-2xl p-5 shadow-md">
-                            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Đường dẫn kết nối trực tiếp</label>
-                            <div class="flex space-x-2 mb-3">
+                        <div class="bg-cyber-card border border-cyber-border rounded-xl p-3.5 shadow-sm">
+                            <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1.5">Đường dẫn kết nối trực tiếp</label>
+                            <div class="flex space-x-1.5 mb-2">
                                 <input id="mobile-url-display" type="text" readonly value="http://localhost:3888"
-                                       class="flex-1 text-xs font-mono bg-cyber-bg border border-cyber-border text-cyan-400 rounded-lg px-3 py-2.5 focus:outline-none select-all">
-                                <button onclick="window.tabMobile.copyUrl()" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-lg transition flex items-center space-x-1">
+                                       class="flex-1 text-xs font-mono bg-cyber-bg border border-cyber-border text-cyan-400 rounded px-2.5 py-1.5 focus:outline-none select-all">
+                                <button onclick="window.tabMobile.copyUrl()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded transition flex items-center space-x-1">
                                     <i class="fas fa-copy"></i>
                                     <span>Copy</span>
                                 </button>
                             </div>
-                            <p class="text-[11px] text-slate-500">
-                                Bạn cũng có thể gửi liên kết này qua Zalo/Telegram/Messenger của bạn để click mở trên điện thoại.
+                            <p class="text-[10px] text-slate-500">
+                                Bạn cũng có thể gửi liên kết này qua Zalo/Telegram để mở trên điện thoại.
                             </p>
                         </div>
 
                         <!-- Local IP Interfaces -->
-                        <div class="bg-cyber-card border border-cyber-border rounded-2xl p-5 shadow-md">
-                            <div class="text-xs font-bold text-slate-400 uppercase mb-3">Địa chỉ IP mạng nội bộ (LAN)</div>
+                        <div class="bg-cyber-card border border-cyber-border rounded-xl p-3.5 shadow-sm">
+                            <div class="text-[11px] font-bold text-slate-400 uppercase mb-2">Địa chỉ IP mạng nội bộ (LAN)</div>
                             <div id="mobile-ip-list">
                                 <div class="text-xs text-slate-500">Đang tải danh sách IP...</div>
                             </div>
                         </div>
 
                         <!-- PWA Install Guide Card -->
-                        <div class="bg-cyber-card border border-cyber-border rounded-2xl p-5 shadow-md">
-                            <div class="text-xs font-bold text-slate-300 uppercase mb-2 flex items-center space-x-2">
+                        <div class="bg-cyber-card border border-cyber-border rounded-xl p-3.5 shadow-sm">
+                            <div class="text-xs font-bold text-slate-300 uppercase mb-1.5 flex items-center space-x-1.5">
                                 <i class="fas fa-mobile-alt text-cyan-400"></i>
                                 <span>Cài đặt làm App Toàn Màn Hình</span>
                             </div>
-                            <div class="text-[11px] text-slate-400 space-y-1.5 leading-relaxed">
+                            <div class="text-[11px] text-slate-400 space-y-1 leading-relaxed">
                                 <div><b>• iPhone (Safari):</b> Bấm nút <b>Chia sẻ</b> ➔ Chọn <b>"Thêm vào màn hình chính"</b>.</div>
                                 <div><b>• Android (Chrome):</b> Bấm <b>3 chấm</b> ➔ Chọn <b>"Cài đặt ứng dụng"</b>.</div>
-                                <div class="text-slate-500 italic mt-1">App sẽ hiển thị icon riêng trên màn hình điện thoại như ứng dụng tải từ App Store.</div>
                             </div>
                         </div>
                     </div>
@@ -872,7 +865,7 @@
 
 
     <!-- STATUS BAR (BOTTOM) -->
-    <footer class="bg-cyber-card border-t border-cyber-border px-6 py-2 flex items-center justify-between z-10 shadow-inner">
+    <footer class="bg-cyber-card border-t border-cyber-border px-4 py-1.5 flex items-center justify-between z-10 shadow-inner">
         <div class="flex items-center space-x-2 text-xs text-slate-400">
             <span class="font-semibold text-slate-300">Trạng thái:</span>
             <span id="app-status">Sẵn sàng.</span>
@@ -897,8 +890,8 @@
     <script src="renderer.js"></script>
     <script>
         // TAB CONTROLLER
-        const TAB_ACTIVE = "flex items-center px-6 py-2 rounded-full text-xs font-semibold tracking-wider transition-all duration-300 bg-blue-600 text-white shadow-sm";
-        const TAB_INACTIVE = "flex items-center px-6 py-2 rounded-full text-xs font-semibold tracking-wider transition-all duration-300 text-slate-400 hover:text-white";
+        const TAB_ACTIVE = "flex items-center px-4 py-1.5 rounded-md text-xs font-semibold tracking-wider transition-all duration-200 bg-blue-600 text-white shadow-sm";
+        const TAB_INACTIVE = "flex items-center px-4 py-1.5 rounded-md text-xs font-semibold tracking-wider transition-all duration-200 text-slate-400 hover:text-white";
 
         function switchTab(tab) {
             const tabs = ['mailtm', 'outlook', 'reg', 'settings', 'mobile'];
