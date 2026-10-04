@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "TikTok · Trả lại lựa chọn Smart+",
+  "name": "Bypass TikTok Smart+",
   "version": "2.3.0",
-  "description": "Hiện lại lựa chọn Chiến dịch thủ công / Smart+ cho Doanh số, Khách hàng tiềm năng và Quảng cáo ứng dụng, bằng chính cờ opt-out của Ads Manager.",
+  "description": "Restore Manual Campaign option for TikTok Ads Manager",
   "permissions": ["storage", "activeTab"],
   "host_permissions": [
     "https://ads.tiktok.com/*",
@@ -30,8 +30,7 @@
     }
   ],
   "action": {
-    "default_title": "TikTok · Trả lại lựa chọn Smart+",
+    "default_title": "Bypass TikTok Smart+",
     "default_popup": "popup.html"
   }
 }
-

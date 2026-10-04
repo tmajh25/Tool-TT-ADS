@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
 
 // Point Selenium Manager to the unpacked folder in packaged Electron app
 if (process.resourcesPath) {
@@ -33,11 +34,16 @@ class SeleniumService {
     }
 
     getSmartPlusExtensionPath() {
-        const devPath = path.join(__dirname, '..', 'extensions', 'Bypass-tiktok-smartplus-ext');
-        if (fs.existsSync(devPath)) return devPath;
-
+        // Ưu tiên nạp thẳng thư mục extension của người dùng tại Downloads
         const downloadsExt = path.join(os.homedir(), 'Downloads', 'Bypass-tiktok-smartplus-ext');
-        if (fs.existsSync(downloadsExt)) return downloadsExt;
+        if (fs.existsSync(downloadsExt) && fs.existsSync(path.join(downloadsExt, 'manifest.json'))) {
+            return downloadsExt;
+        }
+
+        const devPath = path.join(__dirname, '..', 'extensions', 'Bypass-tiktok-smartplus-ext');
+        if (fs.existsSync(devPath) && fs.existsSync(path.join(devPath, 'manifest.json'))) {
+            return devPath;
+        }
 
         if (process.resourcesPath) {
             const unpackedPath = path.join(process.resourcesPath, 'app.asar.unpacked', 'extensions', 'Bypass-tiktok-smartplus-ext');
@@ -71,6 +77,7 @@ class SeleniumService {
                     e.message.includes('target frame detached')
                 )) {
                     this.activeDrivers.delete(email);
+                    smartplusHelper.stopWatcher(email);
                 } else if (e.message === 'timeout') {
                     active.push(email);
                 }
@@ -211,30 +218,30 @@ class SeleniumService {
     }
 
     async toggleSmartPlus(email, enabled) {
-        let driver = this.activeDrivers.get((email || '').toLowerCase());
+        let targetEmail = (email || '').toLowerCase();
+        let driver = this.activeDrivers.get(targetEmail);
         if (!driver && this.activeDrivers.size > 0) {
             for (let [dEmail, d] of this.activeDrivers.entries()) {
                 try {
                     await d.getTitle();
                     driver = d;
+                    targetEmail = dEmail;
                     break;
                 } catch (e) {
                     this.activeDrivers.delete(dEmail);
+                    smartplusHelper.stopWatcher(dEmail);
                 }
             }
         }
         if (!driver) return { success: false, error: 'Không tìm thấy phiên trình duyệt đang mở' };
 
         try {
-            const script = smartplusHelper.getInjectionScript(enabled);
-            await driver.executeScript(`
-                ${script}
-                if (typeof window.__setTTSmartPlusBypass === 'function') {
-                    return window.__setTTSmartPlusBypass(${enabled ? 'true' : 'false'});
-                }
-                return { success: true, enabled: ${enabled ? 'true' : 'false'} };
-            `);
-            return { success: true, enabled };
+            const res = await smartplusHelper.syncAllTabs(driver, enabled);
+            if (res.success) {
+                smartplusHelper.startWatcher(targetEmail, driver, enabled);
+                return { success: true, enabled };
+            }
+            return { success: false, error: res.error };
         } catch (e) {
             return { success: false, error: e.message };
         }
@@ -412,10 +419,14 @@ class SeleniumService {
             progressCallback("🚀 Đang khởi động Chrome điều khiển...");
             
             const options = new chrome.Options();
-            options.addArguments('--disable-gpu');
-            options.addArguments('--no-sandbox');
-            options.addArguments('--disable-notifications');
-            options.excludeSwitches('enable-logging');
+            options.addArguments(
+                '--disable-gpu',
+                '--no-sandbox',
+                '--disable-notifications',
+                '--disable-blink-features=AutomationControlled',
+                '--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36'
+            );
+            options.excludeSwitches('enable-automation', 'enable-logging');
 
             const extPath = this.getSmartPlusExtensionPath();
             if (extPath) {
@@ -442,12 +453,13 @@ class SeleniumService {
             this.activeDrivers.set(email.toLowerCase(), driver);
             await driver.manage().window().maximize();
 
-            // Tự động tiêm Bypass Smart+ qua CDP nếu được bật
+            // Tự động tiêm Bypass Smart+ qua CDP và kích hoạt Watcher đa tab nếu được bật
             if (settings.bypassSmartPlus !== false) {
                 try {
                     await driver.sendAndGetDevToolsCommand('Page.addScriptToEvaluateOnNewDocument', {
                         source: smartplusHelper.getInjectionScript(true)
                     });
+                    smartplusHelper.startWatcher(email, driver, true);
                     progressCallback("Đã kích hoạt tính năng Bypass TikTok Smart+...");
                 } catch (e) {
                     console.error("Lỗi tiêm CDP Bypass:", e);
@@ -657,10 +669,12 @@ class SeleniumService {
                     try {
                         const switchBtns = await driver.findElements(By.xpath("//*[contains(text(), 'Switch to') or contains(text(), 'thực bằng email') or contains(text(), 'Email')]"));
                         for (let btn of switchBtns) {
-                            if (await btn.isDisplayed() && (await btn.getText()).toLowerCase().includes('email')) {
-                                await driver.executeScript("arguments[0].click();", btn);
-                                await new Promise(r => setTimeout(r, 1000));
-                            }
+                            try {
+                                if (await btn.isDisplayed() && (await btn.getText()).toLowerCase().includes('email')) {
+                                    await driver.executeScript("arguments[0].click();", btn);
+                                    await new Promise(r => setTimeout(r, 1000));
+                                }
+                            } catch (e) {}
                         }
                     } catch (e) {}
 
@@ -668,14 +682,16 @@ class SeleniumService {
                     try {
                         const sendBtns = await driver.findElements(By.xpath("//*[contains(text(), 'Send code') or contains(text(), 'Gửi mã') or contains(text(), 'Resend')]"));
                         for (let btn of sendBtns) {
-                            if (await btn.isDisplayed() && await btn.isEnabled()) {
-                                const btnClass = (await btn.getAttribute('class')) || '';
-                                if (!btnClass.includes('disabled')) {
-                                    await driver.executeScript("arguments[0].click();", btn);
-                                    progressCallback("📧 Đã bấm nút gửi mã xác minh Email!");
-                                    await new Promise(r => setTimeout(r, 5000));
+                            try {
+                                if (await btn.isDisplayed() && await btn.isEnabled()) {
+                                    const btnClass = (await btn.getAttribute('class')) || '';
+                                    if (!btnClass.includes('disabled')) {
+                                        await driver.executeScript("arguments[0].click();", btn);
+                                        progressCallback("📧 Đã bấm nút gửi mã xác minh Email!");
+                                        await new Promise(r => setTimeout(r, 5000));
+                                    }
                                 }
-                            }
+                            } catch (e) {}
                         }
                     } catch (e) {}
 
@@ -685,7 +701,9 @@ class SeleniumService {
                     ));
                     const visibleInputs = [];
                     for (let inp of inputs) {
-                        if (await inp.isDisplayed()) visibleInputs.push(inp);
+                        try {
+                            if (await inp.isDisplayed()) visibleInputs.push(inp);
+                        } catch (e) {}
                     }
                     if (visibleInputs.length > 0 && !enteredCode) {
                         let code = null;
@@ -843,12 +861,13 @@ class SeleniumService {
             this.activeDrivers.set(email.toLowerCase(), driver);
             await driver.manage().window().maximize();
 
-            // Tự động tiêm Bypass Smart+ qua CDP nếu được bật
+            // Tự động tiêm Bypass Smart+ qua CDP và kích hoạt Watcher đa tab nếu được bật
             if (settings.bypassSmartPlus !== false) {
                 try {
                     await driver.sendAndGetDevToolsCommand('Page.addScriptToEvaluateOnNewDocument', {
                         source: smartplusHelper.getInjectionScript(true)
                     });
+                    smartplusHelper.startWatcher(email, driver, true);
                 } catch (e) {
                     console.error("Lỗi tiêm CDP Bypass:", e);
                 }
@@ -1058,6 +1077,10 @@ class SeleniumService {
             if (createdDriver) {
                 // Giữ driver trong activeDrivers để các tab BC có thể quét liên tục
                 this.activeDrivers.set(lowerEmail, driver);
+                const settings = cacheService.loadSettings();
+                if (settings.bypassSmartPlus !== false) {
+                    smartplusHelper.startWatcher(lowerEmail, driver, true);
+                }
             }
 
             return { success: true, businessCenters: bcs };
@@ -1065,6 +1088,7 @@ class SeleniumService {
             if (createdDriver && driver) {
                 try { await driver.quit(); } catch (qe) {}
                 this.activeDrivers.delete(lowerEmail);
+                smartplusHelper.stopWatcher(lowerEmail);
             }
             return { success: false, error: e.message };
         }
@@ -1392,6 +1416,9 @@ class SeleniumService {
                     } catch (e) {}
                 }
                 this.activeDrivers.set(lowerEmail, driver);
+                if (settings.bypassSmartPlus !== false) {
+                    smartplusHelper.startWatcher(lowerEmail, driver, true);
+                }
 
                 await driver.get('https://ads.tiktok.com/i18n/login');
                 await driver.manage().deleteAllCookies();
