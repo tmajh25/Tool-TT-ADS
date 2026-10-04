@@ -1,0 +1,54 @@
+{
+  "name": "tooltt",
+  "version": "1.1.0",
+  "description": "ToolTT (Electron Pro UI)",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "mobile": "node mobile/server.js",
+    "dist": "electron-builder --win --x64"
+  },
+
+  "dependencies": {
+    "axios": "^1.6.2",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "googleapis": "^173.0.0",
+    "otplib": "^12.0.1",
+    "playwright": "^1.60.0",
+    "qrcode": "^1.5.4",
+    "selenium-webdriver": "^4.16.0"
+  },
+  "devDependencies": {
+    "electron": "^28.3.3",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.tooltt.app",
+    "productName": "ToolTT",
+    "asarUnpack": [
+      "node_modules/selenium-webdriver/bin/**/*",
+      "extensions/**/*"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
+    "files": [
+      "**/*",
+      "!dist/**/*",
+      "!tool reg/**/*"
+    ]
+  }
+}

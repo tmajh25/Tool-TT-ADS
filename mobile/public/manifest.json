@@ -1,0 +1,22 @@
+{
+  "name": "TikTok Ads Mobile Pro",
+  "short_name": "TT Ads Mobile",
+  "description": "Tool quản lý, kiểm tra số dư và chiến dịch TikTok Ads siêu tốc trên di động",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#090d16",
+  "theme_color": "#090d16",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Production builds
+dist/
+build/
+
+# Local data & caches
+mobile/data/*.json
+*.log
+*.tmp
+
+# IDE & agent artifacts
+.agents/
+graphify-out/
+.vscode/
+.idea/
+
+# OS files
+Thumbs.db
+Desktop.ini
+.DS_Store

@@ -1,0 +1,59 @@
+body {
+  width: 300px;
+  margin: 0;
+  padding: 13px 14px 14px;
+  font: 13px/1.5 -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: #18181b;
+  background: #fff;
+}
+
+h1 {
+  margin: 0 0 10px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: #6b6b74;
+}
+
+.the {
+  padding: 8px 10px;
+  border: 1px solid #e2e2e5;
+  border-radius: 7px;
+  background: #fafafa;
+  font-size: 12px;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+.the.ok { border-color: #bfe3cd; background: #e6f5ec; color: #0d6b3d; }
+.the.loi { border-color: #f3c4bf; background: #fdecea; color: #a1281c; }
+
+.gat {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 11px 0 9px;
+  font-size: 12.5px;
+  cursor: pointer;
+}
+.gat input { margin: 0; }
+
+.nut {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #e2e2e5;
+  border-radius: 6px;
+  background: #fff;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.nut:hover { background: #f6f6f7; }
+
+.ghi {
+  margin: 11px 0 0;
+  font-size: 11px;
+  color: #6b6b74;
+}
+
+

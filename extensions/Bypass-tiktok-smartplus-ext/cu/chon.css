@@ -1,0 +1,94 @@
+#ttcm-hop {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 2147483000;
+  width: 290px;
+  padding: 12px 13px 13px;
+  box-sizing: border-box;
+  background: #fff;
+  border: 1px solid #e2e2e5;
+  border-radius: 10px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, .16);
+  font: 13px/1.5 -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: #18181b;
+}
+
+#ttcm-hop * { box-sizing: border-box; }
+
+.ttcm-dau {
+  display: flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: #6b6b74;
+  margin-bottom: 8px;
+}
+
+.ttcm-dong {
+  margin-left: auto;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 17px;
+  line-height: 1;
+  color: #6b6b74;
+  cursor: pointer;
+  padding: 0 2px;
+}
+.ttcm-dong:hover { color: #18181b; }
+
+.ttcm-mo { margin: 0 0 9px; font-size: 11.5px; color: #6b6b74; }
+
+.ttcm-nut {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 7px 10px;
+  margin-bottom: 6px;
+  border: 1px solid #e2e2e5;
+  border-radius: 7px;
+  background: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+.ttcm-nut:hover { background: #f6f6f7; }
+.ttcm-nut b { display: block; font-weight: 600; font-size: 12.5px; }
+.ttcm-nut small { display: block; margin-top: 1px; font-size: 11px; color: #6b6b74; }
+.ttcm-nut.ttcm-dang { border-color: #f5a524; background: #fffaf0; }
+.ttcm-nut.ttcm-dang b { color: #8a5a00; }
+
+.ttcm-canh {
+  margin: 9px 0 0;
+  padding: 7px 9px;
+  border: 1px solid #f5e0a8;
+  border-radius: 6px;
+  background: #fff8e6;
+  font-size: 11px;
+  color: #8a5a00;
+}
+
+.ttcm-lai {
+  width: 100%;
+  margin-top: 8px;
+  padding: 5px 8px;
+  border: 1px solid #e2e2e5;
+  border-radius: 6px;
+  background: #fff;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.ttcm-lai:hover { background: #f6f6f7; }
+
+#ttcm-bao:empty { display: none; }
+#ttcm-bao {
+  margin-top: 8px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-size: 11.5px;
+}
+#ttcm-bao.ttcm-ok { background: #e6f5ec; color: #0d6b3d; }
+#ttcm-bao.ttcm-loi { background: #fdecea; color: #a1281c; }

@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "TikTok · Trả lại lựa chọn Smart+",
+  "version": "2.2.0",
+  "description": "Hiện lại lựa chọn Chiến dịch thủ công / Smart+ cho Doanh số, Khách hàng tiềm năng và Quảng cáo ứng dụng, bằng chính cờ opt-out của Ads Manager.",
+  "permissions": ["storage", "activeTab"],
+  "host_permissions": ["https://ads.tiktok.com/*"],
+  "content_scripts": [
+    {
+      "matches": ["https://ads.tiktok.com/*"],
+      "js": ["dat.js"],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  "action": {
+    "default_title": "TikTok · Trả lại lựa chọn Smart+",
+    "default_popup": "popup.html"
+  }
+}
+
