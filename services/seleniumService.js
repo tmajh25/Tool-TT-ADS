@@ -363,6 +363,19 @@ class SeleniumService {
         let driver;
 
         try {
+            const lowerEmail = (email || '').toLowerCase();
+            const existingDriver = this.activeDrivers.get(lowerEmail);
+            if (existingDriver) {
+                try {
+                    await existingDriver.getTitle();
+                    progressCallback("Trình duyệt cho tài khoản này đã mở sẵn!");
+                    await existingDriver.manage().window().maximize();
+                    return { success: true };
+                } catch (e) {
+                    this.activeDrivers.delete(lowerEmail);
+                }
+            }
+
             // Lấy danh sách ID thư hiện tại để tránh nhận nhầm thư OTP cũ
             const ignoreIds = [];
             try {
@@ -438,8 +451,55 @@ class SeleniumService {
                 }
             }
 
+            // Kiểm tra và khôi phục Cookie phiên đăng nhập đã lưu
+            if (!skipCookieCheck) {
+                const savedCookies = await cacheService.loadCookies(email);
+                if (savedCookies && Array.isArray(savedCookies) && savedCookies.length > 0) {
+                    const hasAuthCookie = savedCookies.some(c => 
+                        c.name.startsWith('sessionid') || c.name.startsWith('sid_tt') || c.name.startsWith('sso_user')
+                    );
+
+                    if (hasAuthCookie) {
+                        progressCallback("Đang nạp Cookie phiên đăng nhập đã lưu...");
+                        await driver.get('https://ads.tiktok.com/i18n/login');
+                        await driver.manage().deleteAllCookies();
+                        for (let c of savedCookies) {
+                            try {
+                                await driver.manage().addCookie({
+                                    name: c.name,
+                                    value: c.value,
+                                    path: c.path || '/',
+                                    domain: c.domain
+                                });
+                            } catch (e) {}
+                        }
+
+                        progressCallback("Đang kiểm tra hiệu lực Cookie...");
+                        await driver.get('https://business.tiktok.com/select');
+                        await new Promise(r => setTimeout(r, 3500));
+
+                        const currentUrl = await driver.getCurrentUrl();
+                        const isSuccess = (currentUrl.includes('business.tiktok.com') || currentUrl.includes('i18n/home')) && 
+                                          !currentUrl.includes('/login');
+
+                        if (isSuccess) {
+                            progressCallback("Cookie phiên vẫn còn hiệu lực! Đã vào thẳng TikTok Ads.");
+                            try {
+                                const freshCookies = await driver.manage().getCookies();
+                                await cacheService.saveCookies(email, freshCookies);
+                            } catch (e) {}
+                            return { success: true, cookies: savedCookies };
+                        } else {
+                            progressCallback("Cookie đã hết hạn, chuyển sang quy trình đăng nhập bằng mật khẩu...");
+                            await driver.get('https://ads.tiktok.com/i18n/login');
+                            try { await driver.manage().deleteAllCookies(); } catch (e) {}
+                        }
+                    }
+                }
+            }
+
             // Luôn truy cập thẳng trang đăng nhập chính thức để điền thông tin
-            progressCallback("🚀 Đang truy cập trang đăng nhập TikTok Ads...");
+            progressCallback("Đang truy cập trang đăng nhập TikTok Ads...");
             await driver.get('https://ads.tiktok.com/i18n/login');
             try { await driver.manage().deleteAllCookies(); } catch (e) {}
             
