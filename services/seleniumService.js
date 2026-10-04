@@ -182,8 +182,19 @@ class SeleniumService {
     }
 
     async toggleSmartPlus(email, enabled) {
-        const driver = this.activeDrivers.get((email || '').toLowerCase());
-        if (!driver) return { success: false, error: 'Không tìm thấy phiên trình duyệt đang mở cho tài khoản này' };
+        let driver = this.activeDrivers.get((email || '').toLowerCase());
+        if (!driver && this.activeDrivers.size > 0) {
+            for (let [dEmail, d] of this.activeDrivers.entries()) {
+                try {
+                    await d.getTitle();
+                    driver = d;
+                    break;
+                } catch (e) {
+                    this.activeDrivers.delete(dEmail);
+                }
+            }
+        }
+        if (!driver) return { success: false, error: 'Không tìm thấy phiên trình duyệt đang mở' };
 
         try {
             const script = smartplusHelper.getInjectionScript(enabled);
@@ -584,6 +595,12 @@ class SeleniumService {
             options.addArguments('--no-sandbox');
             options.excludeSwitches('enable-logging');
             
+            const extPath = this.getSmartPlusExtensionPath();
+            if (extPath) {
+                options.addArguments(`--disable-extensions-except=${extPath}`);
+                options.addArguments(`--load-extension=${extPath}`);
+            }
+
             if (settings.headless) {
                 options.addArguments('--headless=new');
             }
@@ -599,7 +616,19 @@ class SeleniumService {
                 .setChromeOptions(options)
                 .build();
             
+            this.activeDrivers.set(email.toLowerCase(), driver);
             await driver.manage().window().maximize();
+
+            // Tự động tiêm Bypass Smart+ qua CDP nếu được bật
+            if (settings.bypassSmartPlus !== false) {
+                try {
+                    await driver.sendAndGetDevToolsCommand('Page.addScriptToEvaluateOnNewDocument', {
+                        source: smartplusHelper.getInjectionScript(true)
+                    });
+                } catch (e) {
+                    console.error("Lỗi tiêm CDP Bypass:", e);
+                }
+            }
             
             progressCallback("🚀 Truy cập trang đăng nhập Microsoft live...");
             await driver.get('https://login.live.com/login.srf');
