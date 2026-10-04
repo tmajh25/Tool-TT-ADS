@@ -1035,7 +1035,91 @@
                 showToast('Đã lưu thay đổi tài khoản Outlook!');
             }
         }
+
+        // XỬ LÝ MENU TÙY CHỌN DÒNG TÀI KHOẢN (GỘP SỬA & XÓA)
+        let activeRowMenu = null;
+
+        function openAccountRowMenu(event, tab, index) {
+            event.stopPropagation();
+            const menu = document.getElementById('account-row-menu');
+            if (!menu) return;
+
+            if (activeRowMenu && activeRowMenu.tab === tab && activeRowMenu.index === index) {
+                closeAccountRowMenu();
+                return;
+            }
+
+            activeRowMenu = { tab, index };
+            const rect = event.currentTarget.getBoundingClientRect();
+            
+            const menuHeight = 65;
+            const menuWidth = 120;
+            let top = rect.bottom + 4;
+            if (top + menuHeight > window.innerHeight) {
+                top = Math.max(10, rect.top - menuHeight - 4);
+            }
+            let left = rect.right - menuWidth;
+            if (left < 10) left = 10;
+
+            menu.style.top = `${top}px`;
+            menu.style.left = `${left}px`;
+            menu.classList.remove('hidden');
+        }
+
+        function closeAccountRowMenu() {
+            const menu = document.getElementById('account-row-menu');
+            if (menu) menu.classList.add('hidden');
+            activeRowMenu = null;
+        }
+
+        window.openAccountRowMenu = openAccountRowMenu;
+        window.closeAccountRowMenu = closeAccountRowMenu;
+
+        document.addEventListener('click', () => {
+            closeAccountRowMenu();
+        });
+
+        window.addEventListener('resize', closeAccountRowMenu);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('mailtm-accounts-list')?.addEventListener('scroll', closeAccountRowMenu);
+            document.getElementById('outlook-accounts-list')?.addEventListener('scroll', closeAccountRowMenu);
+
+            document.getElementById('menu-btn-edit')?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (!activeRowMenu) return;
+                const { tab, index } = activeRowMenu;
+                closeAccountRowMenu();
+                if (tab === 'mailtm' && window.tabMailtm) {
+                    window.tabMailtm.openEditModal(index);
+                } else if (tab === 'outlook' && window.tabOutlook) {
+                    window.tabOutlook.openEditModal(index);
+                }
+            });
+
+            document.getElementById('menu-btn-delete')?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (!activeRowMenu) return;
+                const { tab, index } = activeRowMenu;
+                closeAccountRowMenu();
+                if (tab === 'mailtm' && window.tabMailtm) {
+                    window.tabMailtm.deleteAccount(index);
+                } else if (tab === 'outlook' && window.tabOutlook) {
+                    window.tabOutlook.deleteAccount(index);
+                }
+            });
+        });
     </script>
+
+    <!-- POPUP MENU TÙY CHỌN DÒNG TÀI KHOẢN (GỘP SỬA & XÓA) -->
+    <div id="account-row-menu" class="fixed bg-cyber-card border border-cyber-border rounded-lg shadow-2xl py-1 z-50 hidden text-xs min-w-[120px] backdrop-blur-md">
+        <button id="menu-btn-edit" class="w-full text-left px-3 py-1.5 text-slate-200 hover:bg-blue-600/20 hover:text-blue-400 transition font-medium">
+            Sửa tài khoản
+        </button>
+        <button id="menu-btn-delete" class="w-full text-left px-3 py-1.5 text-rose-400 hover:bg-rose-500/20 hover:text-rose-300 transition font-medium border-t border-cyber-border/40">
+            Xóa tài khoản
+        </button>
+    </div>
 
     <!-- MODAL CHỈNH SỬA TÀI KHOẢN -->
     <div id="modal-edit-account" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center hidden">

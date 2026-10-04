@@ -115,19 +115,21 @@ class TabMailtm {
                     </div>
                     <div class="flex items-center space-x-1 flex-shrink-0">
                         ${badgeHtml}
-                        <button onclick="event.stopPropagation(); window.tabMailtm.openEditModal(${index})" 
-                                class="text-slate-400 hover:text-blue-400 px-1.5 py-0.5 text-[11px] font-medium rounded bg-slate-800/40 hover:bg-slate-800 transition-colors flex-shrink-0" title="Sửa tài khoản">
-                            Sửa
-                        </button>
-                        <button onclick="event.stopPropagation(); window.tabMailtm.deleteAccount(${index})" 
-                                class="text-slate-400 hover:text-rose-400 px-1.5 py-0.5 text-[11px] font-medium rounded bg-slate-800/40 hover:bg-slate-800 transition-colors flex-shrink-0" title="Xóa tài khoản">
-                            Xóa
+                        <button onclick="event.stopPropagation(); window.tabMailtm.openRowMenu(event, ${index})" 
+                                class="text-slate-400 hover:text-white px-2 py-0.5 text-xs font-bold rounded bg-slate-800/40 hover:bg-slate-700/80 transition flex-shrink-0 leading-none" title="Tùy chọn">
+                            ···
                         </button>
                     </div>
                 </div>
             `;
             this.listContainer.appendChild(item);
         });
+    }
+
+    openRowMenu(event, index) {
+        if (window.openAccountRowMenu) {
+            window.openAccountRowMenu(event, 'mailtm', index);
+        }
     }
 
     openEditModal(index = null) {
