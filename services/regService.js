@@ -51,6 +51,56 @@ class RegService {
     return res.data;
   }
 
+  extractTikTokCode(text) {
+    if (!text || typeof text !== 'string') return null;
+    const cleanText = text.replace(/<[^>]*>/g, ' ');
+
+    const contextPatterns = [
+      /(?:verification code|verification|mã xác minh|mã xác thực|code is|code:|mã:)\s*[:：\-]?\s*([A-Za-z0-9]{6})\b/i,
+      /\b([A-Za-z0-9]{6})\b(?:\s+is your verification code|\s+là mã xác minh)/i,
+      /【TikTok】[^\n\r]*?\b([A-Za-z0-9]{6})\b/i,
+      /\[TikTok\][^\n\r]*?\b([A-Za-z0-9]{6})\b/i
+    ];
+
+    for (const pattern of contextPatterns) {
+      const match = cleanText.match(pattern);
+      if (match && match[1]) {
+        const candidate = match[1].toUpperCase();
+        if (candidate !== 'TIKTOK' && candidate !== 'VERIFY') {
+          return candidate;
+        }
+      }
+    }
+
+    const EXCLUDED_WORDS = new Set([
+      'TIKTOK', 'BUSINESS', 'VERIFY', 'ONLINE', 'SYSTEM', 'UPDATE',
+      'MEMBER', 'FAILED', 'CENTER', 'REPORT', 'MANAGE', 'THANKS',
+      'POLICY', 'CREATE', 'GLOBAL', 'PLEASE', 'FOLLOW', 'ACCOUN',
+      'LOGINT', 'NOTICE', 'SECURE', 'DEVICE', 'BROWSE', 'WINDOW',
+      'CHROME', 'CLIENT', 'SERVER', 'SAFETY', 'STATUS', 'CHANGE',
+      'ACCESS', 'ACTION', 'MOBILE', 'NUMBER', 'SUBMIT', 'CANCEL',
+      'CODING', 'SEARCH', 'DOMAIN', 'ACTIVE', 'DELETE', 'REVIEW'
+    ]);
+
+    const allMatches = cleanText.match(/\b[A-Za-z0-9]{6}\b/g) || [];
+    for (const token of allMatches) {
+      const upper = token.toUpperCase();
+      if (EXCLUDED_WORDS.has(upper)) continue;
+      if (/\d/.test(upper)) {
+        return upper;
+      }
+    }
+
+    for (const token of allMatches) {
+      const upper = token.toUpperCase();
+      if (!EXCLUDED_WORDS.has(upper)) {
+        return upper;
+      }
+    }
+
+    return null;
+  }
+
   async waitForMailCode(token, ignoreIds = []) {
     const startTime = Date.now();
     while (Date.now() - startTime < 120000) {
@@ -61,9 +111,12 @@ class RegService {
           if (ignoreIds.includes(msg.id)) continue;
           if (msg.from.address.toLowerCase().includes('tiktok') || msg.subject.toLowerCase().includes('tiktok')) {
             const detail = await this.getMessage(token, msg.id);
-            const content = detail.text || detail.intro || '';
-            const match = content.match(/\b\d{6}\b/) || content.match(/\b[A-Z0-9]{6}\b/);
-            if (match) return match[0];
+            const textData = detail.text || '';
+            const introData = detail.intro || '';
+            const htmlData = Array.isArray(detail.html) ? detail.html.join(' ') : (detail.html || '');
+            const combinedContent = `${textData} ${introData} ${htmlData}`;
+            const code = this.extractTikTokCode(combinedContent);
+            if (code) return code;
           }
         }
       } catch (e) {}

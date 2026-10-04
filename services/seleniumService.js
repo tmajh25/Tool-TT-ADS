@@ -211,6 +211,64 @@ class SeleniumService {
         }
     }
 
+    extractTikTokCode(text) {
+        if (!text || typeof text !== 'string') return null;
+        
+        // Loại bỏ HTML tags
+        const cleanText = text.replace(/<[^>]*>/g, ' ');
+
+        // 1. Tìm theo ngữ cảnh rõ ràng trước
+        const contextPatterns = [
+            /(?:verification code|verification|mã xác minh|mã xác thực|code is|code:|mã:)\s*[:：\-]?\s*([A-Za-z0-9]{6})\b/i,
+            /\b([A-Za-z0-9]{6})\b(?:\s+is your verification code|\s+là mã xác minh)/i,
+            /【TikTok】[^\n\r]*?\b([A-Za-z0-9]{6})\b/i,
+            /\[TikTok\][^\n\r]*?\b([A-Za-z0-9]{6})\b/i
+        ];
+
+        for (const pattern of contextPatterns) {
+            const match = cleanText.match(pattern);
+            if (match && match[1]) {
+                const candidate = match[1].toUpperCase();
+                if (candidate !== 'TIKTOK' && candidate !== 'VERIFY') {
+                    return candidate;
+                }
+            }
+        }
+
+        // 2. Danh sách từ tiếng Anh / thương hiệu 6 ký tự hay xuất hiện trong email TikTok
+        const EXCLUDED_WORDS = new Set([
+            'TIKTOK', 'BUSINESS', 'VERIFY', 'ONLINE', 'SYSTEM', 'UPDATE',
+            'MEMBER', 'FAILED', 'CENTER', 'REPORT', 'MANAGE', 'THANKS',
+            'POLICY', 'CREATE', 'GLOBAL', 'PLEASE', 'FOLLOW', 'ACCOUN',
+            'LOGINT', 'NOTICE', 'SECURE', 'DEVICE', 'BROWSE', 'WINDOW',
+            'CHROME', 'CLIENT', 'SERVER', 'SAFETY', 'STATUS', 'CHANGE',
+            'ACCESS', 'ACTION', 'MOBILE', 'NUMBER', 'SUBMIT', 'CANCEL',
+            'CODING', 'SEARCH', 'DOMAIN', 'ACTIVE', 'DELETE', 'REVIEW'
+        ]);
+
+        // 3. Quét tất cả cụm 6 ký tự gồm chữ và số
+        const allMatches = cleanText.match(/\b[A-Za-z0-9]{6}\b/g) || [];
+        
+        // Ưu tiên mã có chứa số (như VAE97H hoặc 123456)
+        for (const token of allMatches) {
+            const upper = token.toUpperCase();
+            if (EXCLUDED_WORDS.has(upper)) continue;
+            if (/\d/.test(upper)) {
+                return upper;
+            }
+        }
+
+        // Fallback: chọn token hợp lệ đầu tiên không nằm trong blacklist
+        for (const token of allMatches) {
+            const upper = token.toUpperCase();
+            if (!EXCLUDED_WORDS.has(upper)) {
+                return upper;
+            }
+        }
+
+        return null;
+    }
+
     async getMailtmCode(email, mailPass, ignoreIds = [], progressCallback) {
         try {
             progressCallback("📩 Đang đăng nhập Mail.tm để lấy mã xác thực...");
@@ -250,16 +308,16 @@ class SeleniumService {
                     if (newMsgs.length > 0) {
                         const latestMsg = newMsgs[0];
                         const msgContent = await session.get(`/messages/${latestMsg.id}`, { headers });
-                        const bodyText = msgContent.data.text || msgContent.data.intro || '';
+                        const textData = msgContent.data.text || '';
+                        const introData = msgContent.data.intro || '';
+                        const htmlData = Array.isArray(msgContent.data.html) ? msgContent.data.html.join(' ') : (msgContent.data.html || '');
+                        const combinedContent = `${textData} ${introData} ${htmlData}`;
                         
-                        // Tìm mã xác minh 6 ký tự viết hoa / số
-                        const match = bodyText.match(/\b[A-Z0-9]{6}\b/);
-                        if (match) {
-                            const code = match[0];
-                            if (code !== 'TIKTOK' && code !== 'BUSINESS') {
-                                progressCallback(`🎯 Đã tìm thấy Mã: ${code}`);
-                                return code;
-                            }
+                        // Trích xuất mã xác minh TikTok (hỗ trợ cả chữ số lẫn chữ cái, ví dụ VAE97H)
+                        const code = this.extractTikTokCode(combinedContent);
+                        if (code) {
+                            progressCallback(`🎯 Đã tìm thấy Mã: ${code}`);
+                            return code;
                         }
                     }
                 } catch (e) {
@@ -273,6 +331,7 @@ class SeleniumService {
         }
         return null;
     }
+
 
     async loginTikTokAds(email, tiktokPass, mailPass, progressCallback, secret = '', skipCookieCheck = false) {
         let driver;
@@ -525,30 +584,90 @@ class SeleniumService {
                     }
                     if (visibleInputs.length > 0 && !enteredCode) {
                         let code = null;
-                        if (secret) {
+
+                        // Kiểm tra xem trang có đang yêu cầu mã xác thực Email hay TOTP
+                        let isEmailChallenge = false;
+                        let isTotpChallenge = false;
+                        try {
+                            const bodyEl = await driver.findElement(By.tagName('body'));
+                            const bodyText = (await bodyEl.getText()).toLowerCase();
+                            if (bodyText.includes('email') || bodyText.includes('thư') || bodyText.includes('gửi lại') || bodyText.includes('resend')) {
+                                isEmailChallenge = true;
+                            }
+                            if (bodyText.includes('authenticator') || bodyText.includes('ứng dụng xác thực') || bodyText.includes('google')) {
+                                isTotpChallenge = true;
+                            }
+                        } catch (e) {}
+
+                        // 1. Nếu là xác minh Email hoặc có mật khẩu Mail.tm và không phải là yêu cầu thuần Authenticator
+                        if ((isEmailChallenge || !isTotpChallenge || !secret) && mailPass) {
+                            code = await this.getMailtmCode(email, mailPass, ignoreIds, progressCallback);
+                        }
+
+                        // 2. Nếu chưa có mã và có secret TOTP: thử tạo mã TOTP
+                        if (!code && secret) {
                             try {
                                 const cleanSecret = secret.replace(/\s+/g, '').toUpperCase();
                                 code = otplib.authenticator.generate(cleanSecret);
                                 progressCallback(`🔑 Đang thử điền mã 2FA TOTP: ${code}`);
                             } catch (e) {}
                         }
-                        if (!code && (email.includes('mail.tm') || email.endsWith('.tm'))) {
+
+                        // 3. Fallback: Nếu vẫn chưa có mã mà mailPass có nhưng chưa thử
+                        if (!code && mailPass && !isEmailChallenge) {
                             code = await this.getMailtmCode(email, mailPass, ignoreIds, progressCallback);
                         }
-                        if (code) {
 
+                        if (code) {
                             if (visibleInputs.length >= 6) {
                                 progressCallback(`🔢 Đang điền 6 ô mã xác nhận: ${code}`);
                                 for (let idx = 0; idx < 6; idx++) {
-                                    await visibleInputs[idx].clear();
-                                    await visibleInputs[idx].sendKeys(code[idx]);
+                                    const char = code[idx];
+                                    try {
+                                        await visibleInputs[idx].click();
+                                        await visibleInputs[idx].clear();
+                                    } catch (e) {}
+                                    await visibleInputs[idx].sendKeys(char);
+                                    await driver.executeScript(`
+                                        const el = arguments[0];
+                                        const val = arguments[1];
+                                        if (el) {
+                                            const proto = window.HTMLInputElement.prototype;
+                                            const nativeSetter = Object.getOwnPropertyDescriptor(proto, 'value')?.set;
+                                            if (nativeSetter) {
+                                                nativeSetter.call(el, val);
+                                            } else {
+                                                el.value = val;
+                                            }
+                                            el.dispatchEvent(new Event('input', { bubbles: true }));
+                                            el.dispatchEvent(new Event('change', { bubbles: true }));
+                                        }
+                                    `, visibleInputs[idx], char);
                                     await new Promise(r => setTimeout(r, 100));
                                 }
                                 enteredCode = true;
                             } else if (visibleInputs.length === 1) {
                                 progressCallback(`🔤 Đang điền mã vào ô xác nhận: ${code}`);
-                                await visibleInputs[0].clear();
+                                try {
+                                    await visibleInputs[0].click();
+                                    await visibleInputs[0].clear();
+                                } catch (e) {}
                                 await visibleInputs[0].sendKeys(code);
+                                await driver.executeScript(`
+                                    const el = arguments[0];
+                                    const val = arguments[1];
+                                    if (el) {
+                                        const proto = window.HTMLInputElement.prototype;
+                                        const nativeSetter = Object.getOwnPropertyDescriptor(proto, 'value')?.set;
+                                        if (nativeSetter) {
+                                            nativeSetter.call(el, val);
+                                        } else {
+                                            el.value = val;
+                                        }
+                                        el.dispatchEvent(new Event('input', { bubbles: true }));
+                                        el.dispatchEvent(new Event('change', { bubbles: true }));
+                                    }
+                                `, visibleInputs[0], code);
                                 enteredCode = true;
                             }
 

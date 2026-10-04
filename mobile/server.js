@@ -687,11 +687,16 @@ class MobileServer {
                         const msgDetail = await session.get(`/messages/${msg.id}`, {
                             headers: { Authorization: `Bearer ${token}` }
                         });
-                        const bodyText = msgDetail.data.text || msgDetail.data.intro || '';
+                        const textData = msgDetail.data.text || '';
+                        const introData = msgDetail.data.intro || '';
+                        const htmlData = Array.isArray(msgDetail.data.html) ? msgDetail.data.html.join(' ') : (msgDetail.data.html || '');
+                        const combinedContent = `${textData} ${introData} ${htmlData}`;
                         
-                        const match = bodyText.match(/\b\d{6}\b/) || bodyText.match(/\b[A-Z0-9]{6}\b/);
-                        if (match && match[0] !== 'TIKTOK' && match[0] !== 'BUSINESS') {
-                            foundCode = match[0];
+                        const code = this.seleniumService && typeof this.seleniumService.extractTikTokCode === 'function'
+                            ? this.seleniumService.extractTikTokCode(combinedContent)
+                            : null;
+                        if (code) {
+                            foundCode = code;
                             emailSubject = msg.subject;
                             emailFrom = msg.from ? msg.from.address : '';
                             break;
