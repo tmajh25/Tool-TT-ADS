@@ -475,12 +475,24 @@ class SeleniumService {
                         }
 
                         progressCallback("Đang kiểm tra hiệu lực Cookie...");
-                        await driver.get('https://business.tiktok.com/select');
-                        await new Promise(r => setTimeout(r, 3500));
+                        await driver.get('https://ads.tiktok.com/i18n/home');
 
-                        const currentUrl = await driver.getCurrentUrl();
-                        const isSuccess = (currentUrl.includes('business.tiktok.com') || currentUrl.includes('i18n/home')) && 
-                                          !currentUrl.includes('/login');
+                        let isSuccess = false;
+                        for (let t = 0; t < 6; t++) {
+                            await new Promise(r => setTimeout(r, 1000));
+                            const currentUrl = await driver.getCurrentUrl();
+                            const isLoginPage = currentUrl.includes('/login') || 
+                                                currentUrl.includes('/signin') || 
+                                                currentUrl.includes('passport.tiktok.com') ||
+                                                currentUrl.includes('passport-') ||
+                                                currentUrl.includes('/signup');
+                            
+                            const isTikTokApp = currentUrl.includes('ads.tiktok.com') || currentUrl.includes('business.tiktok.com');
+                            if (!isLoginPage && isTikTokApp) {
+                                isSuccess = true;
+                                break;
+                            }
+                        }
 
                         if (isSuccess) {
                             progressCallback("Cookie phiên vẫn còn hiệu lực! Đã vào thẳng TikTok Ads.");
@@ -612,8 +624,12 @@ class SeleniumService {
 
                     // 2. Check nếu đã đăng nhập thành công (URL đã rời khỏi trang login và có cookie phiên)
                     const currentUrl = await driver.getCurrentUrl();
-                    const isSuccessPage = (currentUrl.includes('i18n/home') || currentUrl.includes('business.tiktok.com')) && 
-                                          !currentUrl.includes('/login');
+                    const isLoginPage = currentUrl.includes('/login') || 
+                                        currentUrl.includes('/signin') || 
+                                        currentUrl.includes('passport.tiktok.com') ||
+                                        currentUrl.includes('passport-') ||
+                                        currentUrl.includes('/signup');
+                    const isSuccessPage = !isLoginPage && (currentUrl.includes('ads.tiktok.com') || currentUrl.includes('business.tiktok.com'));
                     if (isSuccessPage) {
                         let savedCookies = [];
                         try {
@@ -626,9 +642,9 @@ class SeleniumService {
 
                         if (hasSession) {
                             this.activeCaptchas.delete(email.toLowerCase());
-                            progressCallback("✅ Đăng nhập TikTok Ads thành công!");
+                            progressCallback("Đăng nhập TikTok Ads thành công!");
                             await cacheService.saveCookies(email, savedCookies);
-                            progressCallback("💾 Đã ghi nhớ Cookie đăng nhập!");
+                            progressCallback("Đã ghi nhớ Cookie đăng nhập!");
                             return { success: true, cookies: savedCookies };
                         }
                     }
