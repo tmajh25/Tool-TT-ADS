@@ -32,7 +32,7 @@ function hienKetQua(tl) {
   oBat.disabled = false;
   oBat.checked = !tl.tat;
   if (!tl.tk) {
-    ve("Trang này không có tham số aadvid, nên chưa biết tài khoản nào.\nMở trang tạo chiến dịch của một tài khoản quảng cáo.", null);
+    ve("Trang này chưa phát hiện ID tài khoản (advertiser_id/aadvid).\nMở trang tạo chiến dịch của tài khoản quảng cáo.", null);
     return;
   }
   if (tl.tat) {

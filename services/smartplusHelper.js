@@ -20,9 +20,9 @@ function getInjectionScript(enabled = true) {
                         if (raw) {
                             try { cu = JSON.parse(raw); } catch (e) {}
                         }
-                        return JSON.stringify({ ...cu, app: true, lead: true, sales: true });
+                        return JSON.stringify({ ...cu, app: true, lead: true, sales: true, hasRectifiedSession: true });
                     } catch (e) {
-                        return JSON.stringify({ app: true, lead: true, sales: true });
+                        return JSON.stringify({ app: true, lead: true, sales: true, hasRectifiedSession: true });
                     }
                 }
                 return window.__origStorageGetItem.apply(this, arguments);
@@ -94,7 +94,7 @@ function getInjectionScript(enabled = true) {
                     }
                 } else {
                     if (!MUC.every(m => cu[m] === true)) {
-                        sessionStorage.setItem(k, JSON.stringify({ ...cu, app: true, lead: true, sales: true }));
+                        sessionStorage.setItem(k, JSON.stringify({ ...cu, app: true, lead: true, sales: true, hasRectifiedSession: true }));
                     }
                 }
             });
