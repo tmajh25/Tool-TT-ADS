@@ -528,18 +528,59 @@ class TabAccounts {
         if (this.quickPasteInput) this.quickPasteInput.value = '';
     }
 
-    // MỞ FILE TXT NẠP TÀI KHOẢN
-    async openFile(type) {
+    // MỞ FILE TXT NẠP TÀI KHOẢN TỰ ĐỘNG
+    async openFileAuto() {
         const fileContent = await window.electronAPI.openFileDialog();
         if (!fileContent) return;
 
         const lines = fileContent.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
-        let count = 0;
+        let countMailtm = 0;
+        let countOutlook = 0;
 
-        if (type === 'mailtm') {
-            lines.forEach(line => {
-                const parts = line.split('|').map(s => s.trim());
-                if (parts.length >= 2) {
+        for (const line of lines) {
+            const parts = line.split('|').map(s => s.trim());
+            if (parts.length < 2) continue;
+
+            if (this.currentFilter === 'mailtm') {
+                const email = parts[0];
+                if (!this.mailtmAccounts.some(a => a.email.toLowerCase() === email.toLowerCase())) {
+                    this.mailtmAccounts.push({
+                        email: parts[0],
+                        password: parts[1],
+                        pass2: parts[2] || parts[1],
+                        "2fa_secret": (parts[3] && parts[3].length >= 16) ? parts[3] : ((parts[2] && parts[2].length >= 16) ? parts[2] : ''),
+                        status: 'normal'
+                    });
+                    countMailtm++;
+                }
+            } else if (this.currentFilter === 'outlook') {
+                this.outlookAccounts.push({
+                    user_tt: parts[0],
+                    email: parts[1] || parts[0],
+                    pass_tt: parts[2] || parts[1],
+                    pass_mail: parts[3] || parts[2] || parts[1],
+                    type: 'basic',
+                    status: 'normal'
+                });
+                countOutlook++;
+            } else {
+                // Chế độ 'all': tự động nhận diện theo domain hoặc cấu trúc dòng
+                const isOutlook = parts[0].toLowerCase().includes('outlook') || 
+                                  parts[0].toLowerCase().includes('hotmail') ||
+                                  (parts[1] && (parts[1].toLowerCase().includes('outlook') || parts[1].toLowerCase().includes('hotmail'))) ||
+                                  (parts.length >= 4 && !parts[0].includes('@') && parts[1].includes('@'));
+
+                if (isOutlook) {
+                    this.outlookAccounts.push({
+                        user_tt: parts[0],
+                        email: parts[1] || parts[0],
+                        pass_tt: parts[2] || parts[1],
+                        pass_mail: parts[3] || parts[2] || parts[1],
+                        type: 'basic',
+                        status: 'normal'
+                    });
+                    countOutlook++;
+                } else {
                     const email = parts[0];
                     if (!this.mailtmAccounts.some(a => a.email.toLowerCase() === email.toLowerCase())) {
                         this.mailtmAccounts.push({
@@ -549,32 +590,34 @@ class TabAccounts {
                             "2fa_secret": (parts[3] && parts[3].length >= 16) ? parts[3] : ((parts[2] && parts[2].length >= 16) ? parts[2] : ''),
                             status: 'normal'
                         });
-                        count++;
+                        countMailtm++;
                     }
                 }
-            });
-            this.saveMailtm();
-            showToast(`Đã nạp ${count} tài khoản Mail.tm từ file!`);
+            }
+        }
+
+        if (countMailtm > 0) this.saveMailtm();
+        if (countOutlook > 0) this.saveOutlook();
+
+        const messages = [];
+        if (countMailtm > 0) messages.push(`${countMailtm} Mail.tm`);
+        if (countOutlook > 0) messages.push(`${countOutlook} Outlook`);
+
+        if (messages.length > 0) {
+            showToast(`Đã nạp thành công: ${messages.join(', ')}!`);
         } else {
-            lines.forEach(line => {
-                const parts = line.split('|').map(s => s.trim());
-                if (parts.length >= 2) {
-                    this.outlookAccounts.push({
-                        user_tt: parts[0],
-                        email: parts[1] || parts[0],
-                        pass_tt: parts[2] || parts[1],
-                        pass_mail: parts[3] || parts[2] || parts[1],
-                        type: 'basic',
-                        status: 'normal'
-                    });
-                    count++;
-                }
-            });
-            this.saveOutlook();
-            showToast(`Đã nạp ${count} tài khoản Outlook từ file!`);
+            showToast("Không tìm thấy dòng tài khoản mới hợp lệ!");
         }
 
         this.renderAccounts();
+    }
+
+    async openFile(type) {
+        if (!type) return this.openFileAuto();
+        const prevFilter = this.currentFilter;
+        this.currentFilter = type;
+        await this.openFileAuto();
+        this.currentFilter = prevFilter;
     }
 
     // CHECK KHÁNG HÀNG LOẠT (MAIL.TM)

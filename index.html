@@ -359,15 +359,25 @@
                         <button id="filter-outlook" onclick="window.tabAccounts.setFilter('outlook')" class="flex-1 py-1 text-[11px] font-semibold rounded text-center transition text-slate-400 hover:text-white">Outlook</button>
                     </div>
                     
-                    <!-- Ô NHẬP NHANH + THÊM + QUẢN LÝ TÁC VỤ GỘP 1 DÒNG -->
-                    <div class="flex space-x-1.5">
+                    <!-- Ô NHẬP NHANH + THÊM -->
+                    <div class="flex space-x-1.5 mb-2">
                         <input id="acc-quick-paste" type="text" placeholder="Dán Mail|Pass|2FA..." 
                                class="flex-1 min-w-0 text-xs bg-cyber-bg border border-cyber-border text-blue-400 placeholder-slate-500 rounded px-2.5 py-1.5 focus:outline-none focus:border-blue-500 transition">
                         <button onclick="window.tabAccounts.quickAdd()" class="bg-blue-600 hover:bg-blue-500 text-[11px] text-white font-bold px-3 py-1.5 rounded transition flex-shrink-0 whitespace-nowrap">
                             <span>Thêm</span>
                         </button>
-                        <button onclick="window.tabAccounts.toggleManageMenu(event)" class="bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-300 font-semibold px-2 py-1.5 rounded border border-cyber-border transition flex-shrink-0 whitespace-nowrap" title="Quản lý và tác vụ file">
-                            <span>Quản lý ▾</span>
+                    </div>
+
+                    <!-- HÀNG NÚT CHỨC NĂNG TRỰC TIẾP: NHẬP FILE - CHECK KHÁNG - XÓA LIST -->
+                    <div class="grid grid-cols-3 gap-1.5">
+                        <button onclick="window.tabAccounts.openFileAuto()" class="py-1.5 text-[11px] font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-cyber-border rounded transition text-center shadow-sm" title="Nạp danh sách tài khoản từ file txt">
+                            <span>Nhập File</span>
+                        </button>
+                        <button onclick="window.tabAccounts.checkLive()" class="py-1.5 text-[11px] font-semibold bg-emerald-950/40 hover:bg-emerald-900/50 text-emerald-400 border border-emerald-500/30 rounded transition text-center shadow-sm" title="Kiểm tra trạng thái kháng nghị">
+                            <span>Check Kháng</span>
+                        </button>
+                        <button onclick="window.tabAccounts.clearAll()" class="py-1.5 text-[11px] font-semibold bg-rose-950/40 hover:bg-rose-900/50 text-rose-400 border border-rose-500/30 rounded transition text-center shadow-sm" title="Xóa danh sách tài khoản">
+                            <span>Xóa List</span>
                         </button>
                     </div>
                 </div>
@@ -380,6 +390,7 @@
                 <!-- Footer của list -->
                 <div class="p-2 bg-slate-900/40 border-t border-cyber-border flex items-center justify-between text-[11px] text-slate-400">
                     <span id="accounts-count">Số lượng: 0</span>
+                    <button onclick="window.tabAccounts.clearAll()" class="text-rose-500/80 hover:text-rose-400 font-medium transition" title="Xóa toàn bộ danh sách">Xóa hết</button>
                 </div>
             </aside>
 
