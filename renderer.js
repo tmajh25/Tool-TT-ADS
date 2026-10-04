@@ -1,11 +1,8 @@
 // Point mồi khởi chạy Giao diện Frontend Electron
 window.addEventListener('DOMContentLoaded', () => {
     // Khởi tạo các Module Tab
-    if (window.tabMailtm) {
-        window.tabMailtm.init();
-    }
-    if (window.tabOutlook) {
-        window.tabOutlook.init();
+    if (window.tabAccounts) {
+        window.tabAccounts.init();
     }
     if (window.tabSettings) {
         window.tabSettings.init();

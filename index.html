@@ -321,11 +321,8 @@
 
         <!-- TABS SWITCHER -->
         <div class="flex bg-slate-900/60 p-0.5 rounded-lg border border-cyber-border/40 backdrop-blur-sm shadow-inner flex-shrink-0">
-            <button id="btn-tab-mailtm" onclick="switchTab('mailtm')" class="flex items-center px-4 py-1.5 rounded-md text-xs font-semibold tracking-wider transition-all duration-200 bg-blue-600 text-white shadow-sm whitespace-nowrap">
-                <span>MAIL.TM</span>
-            </button>
-            <button id="btn-tab-outlook" onclick="switchTab('outlook')" class="flex items-center px-4 py-1.5 rounded-md text-xs font-semibold tracking-wider transition-all duration-200 text-slate-400 hover:text-white whitespace-nowrap">
-                <span>OUTLOOK</span>
+            <button id="btn-tab-accounts" onclick="switchTab('accounts')" class="flex items-center px-4 py-1.5 rounded-md text-xs font-semibold tracking-wider transition-all duration-200 bg-blue-600 text-white shadow-sm whitespace-nowrap">
+                <span>TÀI KHOẢN</span>
             </button>
             <button id="btn-tab-reg" onclick="switchTab('reg')" class="flex items-center px-4 py-1.5 rounded-md text-xs font-semibold tracking-wider transition-all duration-200 text-slate-400 hover:text-white whitespace-nowrap">
                 <span>REG TK</span>
@@ -345,95 +342,94 @@
     <main class="flex-1 flex overflow-hidden relative">
 
         <!-- =========================================================================
-             TAB 1: MAIL.TM CONTENT
+             TAB 1: QUẢN LÝ TÀI KHOẢN (GỘP MAIL.TM & OUTLOOK)
              ========================================================================= -->
-        <div id="tab-content-mailtm" class="w-full h-full flex overflow-hidden">
+        <div id="tab-content-accounts" class="w-full h-full flex overflow-hidden">
             <!-- LEFT PANEL: TÀI KHOẢN -->
             <aside class="w-80 bg-cyber-card border-r border-cyber-border flex flex-col h-full flex-shrink-0">
                 <div class="p-3 border-b border-cyber-border">
-                    <h2 class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Quản lý Tài khoản</h2>
-                    
-                    <!-- Đăng nhập nhanh gộp 1 dòng -->
-                    <div class="mb-2">
-                        <div class="flex space-x-1.5">
-                            <input id="mailtm-quick-paste" type="text" placeholder="Dán Mail|Pass|2FA..." 
-                                   class="flex-1 min-w-0 text-xs bg-cyber-bg border border-cyber-border text-blue-400 placeholder-slate-500 rounded px-2.5 py-1.5 focus:outline-none focus:border-blue-500 transition">
-                            <button onclick="window.tabMailtm.mailtmManualLogin()" class="bg-slate-800 hover:bg-slate-700 text-[11px] text-white font-semibold px-2.5 py-1.5 rounded transition flex-shrink-0 whitespace-nowrap">
-                                <span>ĐĂNG NHẬP</span>
-                            </button>
-                        </div>
+                    <div class="flex items-center justify-between mb-2">
+                        <h2 class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Quản lý Tài khoản</h2>
                     </div>
 
-                    <!-- Nút Nhập File & Check -->
+                    <!-- BỘ LỌC LOẠI TÀI KHOẢN GỌN GÀNG -->
+                    <div class="flex bg-slate-900/60 p-0.5 rounded-lg border border-cyber-border/40 mb-2">
+                        <button id="filter-all" onclick="window.tabAccounts.setFilter('all')" class="flex-1 py-1 text-[11px] font-semibold rounded text-center transition bg-blue-600 text-white shadow-sm">Tất cả</button>
+                        <button id="filter-mailtm" onclick="window.tabAccounts.setFilter('mailtm')" class="flex-1 py-1 text-[11px] font-semibold rounded text-center transition text-slate-400 hover:text-white">Mail.tm</button>
+                        <button id="filter-outlook" onclick="window.tabAccounts.setFilter('outlook')" class="flex-1 py-1 text-[11px] font-semibold rounded text-center transition text-slate-400 hover:text-white">Outlook</button>
+                    </div>
+                    
+                    <!-- Ô NHẬP NHANH + THÊM + QUẢN LÝ TÁC VỤ GỘP 1 DÒNG -->
                     <div class="flex space-x-1.5">
-                        <button onclick="window.tabMailtm.mailtmOpenFile()" class="flex-1 min-w-0 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 text-blue-400 text-xs font-semibold py-1.5 px-2 rounded transition flex items-center justify-center whitespace-nowrap">
-                            <span>CHỌN FILE</span>
+                        <input id="acc-quick-paste" type="text" placeholder="Dán Mail|Pass|2FA..." 
+                               class="flex-1 min-w-0 text-xs bg-cyber-bg border border-cyber-border text-blue-400 placeholder-slate-500 rounded px-2.5 py-1.5 focus:outline-none focus:border-blue-500 transition">
+                        <button onclick="window.tabAccounts.quickAdd()" class="bg-blue-600 hover:bg-blue-500 text-[11px] text-white font-bold px-3 py-1.5 rounded transition flex-shrink-0 whitespace-nowrap">
+                            <span>Thêm</span>
                         </button>
-                        <button onclick="window.tabMailtm.mailtmCheckLive()" class="flex-1 min-w-0 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 text-blue-400 text-xs font-semibold py-1.5 px-2 rounded transition flex items-center justify-center whitespace-nowrap">
-                            <span>CHECK KHÁNG</span>
+                        <button onclick="window.tabAccounts.toggleManageMenu(event)" class="bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-300 font-semibold px-2 py-1.5 rounded border border-cyber-border transition flex-shrink-0 whitespace-nowrap" title="Quản lý và tác vụ file">
+                            <span>Quản lý ▾</span>
                         </button>
                     </div>
                 </div>
 
                 <!-- Danh sách tài khoản -->
-                <div class="flex-1 overflow-y-auto p-1.5" id="mailtm-accounts-list">
-                    <div class="text-center py-6 text-slate-500 text-xs">Chưa có tài khoản. Hãy nạp file txt!</div>
+                <div class="flex-1 overflow-y-auto p-1.5" id="accounts-list">
+                    <div class="text-center py-6 text-slate-500 text-xs">Chưa có tài khoản. Dán hoặc nạp file txt!</div>
                 </div>
 
                 <!-- Footer của list -->
                 <div class="p-2 bg-slate-900/40 border-t border-cyber-border flex items-center justify-between text-[11px] text-slate-400">
-                    <span id="mailtm-count">Số lượng: 0</span>
-                    <button onclick="window.tabMailtm.mailtmClearAll()" class="text-red-500 hover:text-red-400 font-medium">Xóa hết</button>
+                    <span id="accounts-count">Số lượng: 0</span>
                 </div>
             </aside>
 
             <!-- RIGHT PANEL: CHI TIẾT & HỘP THƯ -->
             <section class="flex-1 flex flex-col h-full bg-cyber-bg overflow-hidden p-2.5 min-w-0">
-                <!-- KHUNG THÔNG TIN ACC (4 CỘT RÕ RÀNG, ĐÃ BỎ GHI CHÚ) -->
+                <!-- KHUNG THÔNG TIN ACC (4 CỘT RÕ RÀNG) -->
                 <div class="bg-cyber-card border border-cyber-border rounded-lg p-2.5 mb-2 shadow-sm flex-shrink-0">
                     <div class="grid grid-cols-4 gap-2.5 mb-2">
                         <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Email</label>
-                            <input id="mailtm-info-email" readonly type="text" value="..." onclick="copyField(this, 'Email')" title="Click để copy Email"
+                            <label id="acc-lbl-field1" class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Email / User</label>
+                            <input id="acc-info-field1" readonly type="text" value="..." onclick="copyField(this, 'Email/User')" title="Click để copy"
                                    class="w-full text-xs font-semibold bg-slate-900/50 border border-cyber-border rounded px-2 py-1 text-white cursor-pointer hover:border-blue-500/50 transition truncate">
                         </div>
                         <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Pass Mail</label>
-                            <input id="mailtm-info-pass" readonly type="text" value="..." onclick="copyField(this, 'Pass Mail')" title="Click để copy Pass Mail"
+                            <label id="acc-lbl-field2" class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Pass Mail</label>
+                            <input id="acc-info-field2" readonly type="text" value="..." onclick="copyField(this, 'Pass Mail')" title="Click để copy"
                                    class="w-full text-xs font-semibold bg-slate-900/50 border border-cyber-border rounded px-2 py-1 text-white cursor-pointer hover:border-blue-500/50 transition truncate">
                         </div>
                         <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Pass TikTok</label>
-                            <input id="mailtm-info-pass2" readonly type="text" value="..." onclick="copyField(this, 'Pass TikTok')" title="Click để copy Pass TikTok"
+                            <label id="acc-lbl-field3" class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Pass TikTok</label>
+                            <input id="acc-info-field3" readonly type="text" value="..." onclick="copyField(this, 'Pass TikTok')" title="Click để copy"
                                    class="w-full text-xs font-semibold bg-slate-900/50 border border-cyber-border rounded px-2 py-1 text-white cursor-pointer hover:border-blue-500/50 transition truncate">
                         </div>
                         <div>
                             <div class="flex items-center justify-between mb-0.5">
-                                <label class="block text-[10px] font-bold text-red-400 uppercase">Mã 2FA</label>
-                                <button onclick="mailtmRefresh2FA()" class="text-[10px] text-slate-400 hover:text-white transition font-medium" title="Lấy mã 2FA mới">
+                                <label id="acc-lbl-field4" class="block text-[10px] font-bold text-red-400 uppercase">Mã 2FA</label>
+                                <button onclick="window.tabAccounts.generateOTP(window.tabAccounts.selectedAccount ? (window.tabAccounts.selectedAccount.type === 'mailtm' ? window.tabAccounts.mailtmAccounts[window.tabAccounts.selectedAccount.originalIndex]['2fa_secret'] : window.tabAccounts.outlookAccounts[window.tabAccounts.selectedAccount.originalIndex]['2fa_secret']) : null)" class="text-[10px] text-slate-400 hover:text-white transition font-medium" title="Lấy mã 2FA mới">
                                     <span>Lấy lại mã</span>
                                 </button>
                             </div>
-                            <input id="mailtm-info-2fa" readonly type="text" value="..." onclick="copyField(this, '2FA Code')" title="Click để copy Mã 2FA"
+                            <input id="acc-info-field4" readonly type="text" value="..." onclick="copyField(this, '2FA Code / Pass Mail')" title="Click để copy"
                                    class="w-full text-xs font-bold bg-red-950/20 border border-red-500/30 rounded px-2 py-1 text-red-400 cursor-pointer hover:border-red-500/50 tracking-wider transition truncate">
                         </div>
                     </div>
 
                     <!-- Hàng Action: Sửa TK, Đăng nhập & Bypass Smart+ -->
                     <div class="flex items-center flex-wrap gap-2 pt-1.5 border-t border-cyber-border/40">
-                        <button onclick="window.tabMailtm.openEditModal()" 
+                        <button onclick="window.tabAccounts.openEditModal()" 
                                 class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-cyber-border text-xs font-semibold py-1.5 px-3 rounded transition flex-shrink-0 whitespace-nowrap" title="Chỉnh sửa tài khoản">
                             <span>SỬA TÀI KHOẢN</span>
                         </button>
-                        <button onclick="window.tabMailtm.mailtmRunSelenium()" 
+                        <button onclick="window.tabAccounts.runSelenium()" 
                                 class="flex-1 min-w-[200px] bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white tracking-wider py-1.5 px-3 rounded transition shadow-sm flex items-center justify-center whitespace-nowrap">
                             <span>ĐĂNG NHẬP VÀO TIKTOK ADS</span>
                         </button>
                         <div class="flex items-center space-x-1.5 px-2.5 py-1 bg-cyber-bg border border-cyber-border rounded flex-shrink-0 whitespace-nowrap">
                             <span class="text-[11px] font-semibold text-slate-300">Bypass Smart+</span>
-                            <button id="mailtm-btn-smartplus" onclick="window.tabMailtm.toggleSmartPlus()" 
+                            <button id="acc-btn-smartplus" onclick="window.tabAccounts.toggleSmartPlus()" 
                                     class="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider transition border bg-emerald-500/20 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/30">
-                                <span id="mailtm-smartplus-status">BẬT</span>
+                                <span id="acc-smartplus-status">BẬT</span>
                             </button>
                         </div>
                     </div>
@@ -445,11 +441,11 @@
                     <div class="w-80 max-w-[40%] min-w-[240px] bg-cyber-card border border-cyber-border rounded-lg flex flex-col overflow-hidden flex-shrink-0 shadow-sm">
                         <div class="px-3 py-1.5 border-b border-cyber-border flex items-center justify-between">
                             <h3 class="text-xs font-bold text-white uppercase tracking-wider">Hộp Thư Đến</h3>
-                            <button onclick="window.tabMailtm.mailtmRefreshInbox()" class="text-[10px] bg-slate-800 hover:bg-slate-700 px-2.5 py-0.5 rounded border border-cyber-border text-slate-300 font-medium transition-colors">
+                            <button onclick="window.tabAccounts.refreshInbox()" class="text-[10px] bg-slate-800 hover:bg-slate-700 px-2.5 py-0.5 rounded border border-cyber-border text-slate-300 font-medium transition-colors">
                                 <span>Làm mới</span>
                             </button>
                         </div>
-                        <div class="flex-1 overflow-y-auto p-1.5" id="mailtm-inbox-list">
+                        <div class="flex-1 overflow-y-auto p-1.5" id="accounts-inbox-list">
                             <div class="text-center py-8 text-slate-500 text-xs">Hãy chọn tài khoản để xem hộp thư.</div>
                         </div>
                     </div>
@@ -462,131 +458,9 @@
                         
                         <div class="flex-1 p-2.5 overflow-y-auto relative" id="mail-reader-container">
                             <iframe id="email-html-content" class="w-full h-full bg-white rounded border-0 hidden"></iframe>
+                            <pre id="outlook-text-content" class="text-xs text-slate-300 font-mono whitespace-pre-wrap leading-relaxed w-full h-full hidden"></pre>
                             
                             <div id="mail-reader-empty" class="absolute inset-0 flex items-center justify-center text-slate-500 text-xs">
-                                Chọn email để đọc nội dung
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-
-
-        <!-- =========================================================================
-             TAB 2: OUTLOOK CONTENT
-             ========================================================================= -->
-        <div id="tab-content-outlook" class="w-full h-full flex overflow-hidden hidden">
-            <!-- LEFT PANEL: TÀI KHOẢN -->
-            <aside class="w-80 bg-cyber-card border-r border-cyber-border flex flex-col h-full flex-shrink-0">
-                <div class="p-3 border-b border-cyber-border">
-                    <h2 class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Quản lý List Outlook</h2>
-                    
-                    <!-- Nhập nhanh gộp 1 dòng -->
-                    <div class="mb-2">
-                        <div class="flex space-x-1.5">
-                            <input id="outlook-quick-paste" type="text" placeholder="Dán định dạng Account..." 
-                                   class="flex-1 min-w-0 text-xs bg-cyber-bg border border-cyber-border text-blue-400 placeholder-slate-500 rounded px-2.5 py-1.5 focus:outline-none focus:border-blue-500 transition">
-                            <button onclick="window.tabOutlook.outlookAddAccount()" class="bg-slate-800 hover:bg-slate-700 text-[11px] text-white font-semibold px-2.5 py-1.5 rounded transition flex-shrink-0 whitespace-nowrap">
-                                <span>THÊM</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Nút Nhập File & Xóa -->
-                    <div class="flex space-x-1.5">
-                        <button onclick="window.tabOutlook.outlookOpenFile()" class="flex-1 min-w-0 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 text-blue-400 text-xs font-semibold py-1.5 px-2 rounded transition flex items-center justify-center whitespace-nowrap">
-                            <span>NHẬP FILE</span>
-                        </button>
-                        <button onclick="window.tabOutlook.outlookClearAll()" class="flex-1 min-w-0 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-400 text-xs font-semibold py-1.5 px-2 rounded transition flex items-center justify-center whitespace-nowrap">
-                            <span>XÓA LIST</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Danh sách tài khoản -->
-                <div class="flex-1 overflow-y-auto p-1.5" id="outlook-accounts-list">
-                    <div class="text-center py-6 text-slate-500 text-xs">Chưa có tài khoản. Hãy nạp file txt!</div>
-                </div>
-
-                <!-- Footer của list -->
-                <div class="p-2 bg-slate-900/40 border-t border-cyber-border flex items-center justify-between text-[11px] text-slate-400">
-                    <span id="outlook-count">Số lượng: 0</span>
-                </div>
-            </aside>
-
-            <!-- RIGHT PANEL: CHI TIẾT & HỘP THƯ -->
-            <section class="flex-1 flex flex-col h-full bg-cyber-bg overflow-hidden p-2.5 min-w-0">
-                <!-- KHUNG THÔNG TIN ACC (4 CỘT RÕ RÀNG, ĐÃ BỎ GHI CHÚ) -->
-                <div class="bg-cyber-card border border-cyber-border rounded-lg p-2.5 mb-2 shadow-sm flex-shrink-0">
-                    <div class="grid grid-cols-4 gap-2.5 mb-2">
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">User/Mail</label>
-                            <input id="outlook-info-user" readonly type="text" value="..." onclick="copyField(this, 'Username')" title="Click để copy Username"
-                                   class="w-full text-xs font-semibold bg-slate-900/50 border border-cyber-border rounded px-2 py-1 text-white cursor-pointer hover:border-blue-500/50 transition truncate">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Email Outlook</label>
-                            <input id="outlook-info-email" readonly type="text" value="..." onclick="copyField(this, 'Email')" title="Click để copy Email"
-                                   class="w-full text-xs font-semibold bg-slate-900/50 border border-cyber-border rounded px-2 py-1 text-white cursor-pointer hover:border-blue-500/50 transition truncate">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Pass TikTok</label>
-                            <input id="outlook-info-pass-tt" readonly type="text" value="..." onclick="copyField(this, 'Pass TikTok')" title="Click để copy Pass TikTok"
-                                   class="w-full text-xs font-semibold bg-slate-900/50 border border-cyber-border rounded px-2 py-1 text-white cursor-pointer hover:border-blue-500/50 transition truncate">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Pass Outlook</label>
-                            <input id="outlook-info-pass-mail" readonly type="text" value="..." onclick="copyField(this, 'Pass Outlook')" title="Click để copy Pass Outlook"
-                                   class="w-full text-xs font-semibold bg-slate-900/50 border border-cyber-border rounded px-2 py-1 text-white cursor-pointer hover:border-blue-500/50 transition truncate">
-                        </div>
-                    </div>
-
-                    <!-- Hàng Action: Sửa TK, Đăng nhập & Bypass Smart+ -->
-                    <div class="flex items-center flex-wrap gap-2 pt-1.5 border-t border-cyber-border/40">
-                        <button onclick="window.tabOutlook.openEditModal()" 
-                                class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-cyber-border text-xs font-semibold py-1.5 px-3 rounded transition flex-shrink-0 whitespace-nowrap" title="Chỉnh sửa tài khoản">
-                            <span>SỬA TÀI KHOẢN</span>
-                        </button>
-                        <button onclick="window.tabOutlook.outlookRunSelenium()" 
-                                class="flex-1 min-w-[200px] bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white tracking-wider py-1.5 px-3 rounded transition shadow-sm flex items-center justify-center whitespace-nowrap">
-                            <span>MỞ TRÌNH DUYỆT ĐĂNG NHẬP</span>
-                        </button>
-                        <div class="flex items-center space-x-1.5 px-2.5 py-1 bg-cyber-bg border border-cyber-border rounded flex-shrink-0 whitespace-nowrap">
-                            <span class="text-[11px] font-semibold text-slate-300">Bypass Smart+</span>
-                            <button id="outlook-btn-smartplus" onclick="window.tabOutlook.toggleSmartPlus()" 
-                                    class="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider transition border bg-emerald-500/20 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/30">
-                                <span id="outlook-smartplus-status">BẬT</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- VÙNG HỘP THƯ & TRÌNH ĐỌC (RỘNG RÃI, KHÔNG BỊ ÉP) -->
-                <div class="flex-1 flex space-x-2.5 overflow-hidden min-h-0">
-                    <!-- HỘP THƯ ĐẾN -->
-                    <div class="w-80 max-w-[40%] min-w-[240px] bg-cyber-card border border-cyber-border rounded-lg flex flex-col overflow-hidden flex-shrink-0 shadow-sm">
-                        <div class="px-3 py-1.5 border-b border-cyber-border flex items-center justify-between">
-                            <h3 class="text-xs font-bold text-white uppercase tracking-wider">Hộp Thư Đến</h3>
-                            <button onclick="window.tabOutlook.outlookRefreshInbox()" class="text-[10px] bg-slate-800 hover:bg-slate-700 px-2.5 py-0.5 rounded border border-cyber-border text-slate-300 font-medium transition-colors">
-                                <span>Làm mới</span>
-                            </button>
-                        </div>
-                        <div class="flex-1 overflow-y-auto p-1.5" id="outlook-inbox-list">
-                            <div class="text-center py-8 text-slate-500 text-xs">Hãy chọn tài khoản để xem hộp thư.</div>
-                        </div>
-                    </div>
-
-                    <!-- NỘI DUNG THƯ CHI TIẾT -->
-                    <div class="flex-1 bg-cyber-card border border-cyber-border rounded-lg flex flex-col overflow-hidden shadow-sm">
-                        <div class="px-3 py-1.5 border-b border-cyber-border flex items-center justify-between">
-                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Nội Dung Chi Tiết</span>
-                        </div>
-                        
-                        <div class="flex-1 p-2.5 overflow-y-auto relative" id="outlook-reader-container">
-                            <pre id="outlook-text-content" class="text-xs text-slate-300 font-mono whitespace-pre-wrap leading-relaxed w-full h-full"></pre>
-                            
-                            <div id="outlook-reader-empty" class="absolute inset-0 flex items-center justify-center text-slate-500 text-xs">
                                 Chọn email để đọc nội dung
                             </div>
                         </div>
@@ -894,6 +768,7 @@
     <script src="ui/themeManager.js"></script>
     <script src="ui/tabMailtm.js"></script>
     <script src="ui/tabOutlook.js"></script>
+    <script src="ui/tabAccounts.js"></script>
     <script src="ui/tabReg.js"></script>
     <script src="ui/tabSettings.js"></script>
     <script src="ui/tabMobile.js"></script>
@@ -904,7 +779,8 @@
         const TAB_INACTIVE = "flex items-center px-4 py-1.5 rounded-md text-xs font-semibold tracking-wider transition-all duration-200 text-slate-400 hover:text-white";
 
         function switchTab(tab) {
-            const tabs = ['mailtm', 'outlook', 'reg', 'settings', 'mobile'];
+            if (tab === 'mailtm' || tab === 'outlook') tab = 'accounts';
+            const tabs = ['accounts', 'reg', 'settings', 'mobile'];
             tabs.forEach(t => {
                 const btn = document.getElementById(`btn-tab-${t}`);
                 const content = document.getElementById(`tab-content-${t}`);
@@ -920,7 +796,7 @@
                 window.tabMobile.loadServerInfo();
             }
 
-            const labels = { mailtm: 'Mail.tm', outlook: 'Outlook', reg: 'Reg TK', settings: 'Cài đặt', mobile: 'Mobile App' };
+            const labels = { accounts: 'Tài khoản', reg: 'Reg TK', settings: 'Cài đặt', mobile: 'Mobile App' };
             showStatus('Đã chuyển sang tab ' + (labels[tab] || tab));
         }
 
@@ -952,7 +828,14 @@
 
         // REFRESH 2FA MANUAL HELPER
         function mailtmRefresh2FA() {
-            if (window.tabMailtm && window.tabMailtm.selectedAccountIndex !== null) {
+            if (window.tabAccounts && window.tabAccounts.selectedAccount) {
+                const sel = window.tabAccounts.selectedAccount;
+                const acc = sel.type === 'mailtm' ? window.tabAccounts.mailtmAccounts[sel.originalIndex] : window.tabAccounts.outlookAccounts[sel.originalIndex];
+                if (acc && acc['2fa_secret']) {
+                    window.tabAccounts.generateOTP(acc['2fa_secret']);
+                    showToast("Đã tải lại mã 2FA mới!");
+                }
+            } else if (window.tabMailtm && window.tabMailtm.selectedAccountIndex !== null) {
                 const acc = window.tabMailtm.accounts[window.tabMailtm.selectedAccountIndex];
                 window.tabMailtm.generateOTP(acc['2fa_secret']);
                 showToast("Đã tải lại mã 2FA mới!");
@@ -997,39 +880,75 @@
         function saveEditModal() {
             if (!currentEditContext) return;
             const idx = currentEditContext.index;
-            if (currentEditContext.tab === 'mailtm') {
+            const targetType = currentEditContext.tab;
+
+            if (targetType === 'mailtm') {
                 const email = document.getElementById('edit-input-field1').value.trim();
                 const passMail = document.getElementById('edit-input-field2').value.trim();
                 const passTT = document.getElementById('edit-input-field3').value.trim();
                 const secret2FA = document.getElementById('edit-input-field4').value.trim();
                 if (!email) { showToast('Email không được để trống!'); return; }
 
-                window.tabMailtm.accounts[idx].email = email;
-                window.tabMailtm.accounts[idx].password = passMail;
-                window.tabMailtm.accounts[idx].pass2 = passTT || passMail;
-                window.tabMailtm.accounts[idx]['2fa_secret'] = secret2FA;
-                window.tabMailtm.saveAccounts();
-                window.tabMailtm.renderAccounts();
-                if (window.tabMailtm.selectedAccountIndex === idx) {
-                    window.tabMailtm.selectAccount(idx);
+                if (window.tabAccounts) {
+                    const acc = window.tabAccounts.mailtmAccounts[idx];
+                    if (acc) {
+                        acc.email = email;
+                        acc.password = passMail;
+                        acc.pass2 = passTT || passMail;
+                        acc['2fa_secret'] = secret2FA;
+                        window.tabAccounts.saveMailtm();
+                        window.tabAccounts.renderAccounts();
+                        if (window.tabAccounts.selectedAccount && 
+                            window.tabAccounts.selectedAccount.type === 'mailtm' && 
+                            window.tabAccounts.selectedAccount.originalIndex === idx) {
+                            window.tabAccounts.selectAccount('mailtm', idx);
+                        }
+                    }
+                } else if (window.tabMailtm) {
+                    window.tabMailtm.accounts[idx].email = email;
+                    window.tabMailtm.accounts[idx].password = passMail;
+                    window.tabMailtm.accounts[idx].pass2 = passTT || passMail;
+                    window.tabMailtm.accounts[idx]['2fa_secret'] = secret2FA;
+                    window.tabMailtm.saveAccounts();
+                    window.tabMailtm.renderAccounts();
+                    if (window.tabMailtm.selectedAccountIndex === idx) {
+                        window.tabMailtm.selectAccount(idx);
+                    }
                 }
                 closeEditModal();
                 showToast('Đã lưu thay đổi tài khoản Mail.tm!');
-            } else if (currentEditContext.tab === 'outlook') {
+            } else if (targetType === 'outlook') {
                 const userTT = document.getElementById('edit-input-field1').value.trim();
                 const email = document.getElementById('edit-input-field2').value.trim();
                 const passTT = document.getElementById('edit-input-field3').value.trim();
                 const passMail = document.getElementById('edit-input-field4').value.trim();
                 if (!email && !userTT) { showToast('Vui lòng nhập Email hoặc Username!'); return; }
 
-                window.tabOutlook.accounts[idx].user_tt = userTT || email;
-                window.tabOutlook.accounts[idx].email = email || userTT;
-                window.tabOutlook.accounts[idx].pass_tt = passTT;
-                window.tabOutlook.accounts[idx].pass_mail = passMail;
-                window.tabOutlook.saveAccounts();
-                window.tabOutlook.renderAccounts();
-                if (window.tabOutlook.selectedAccountIndex === idx) {
-                    window.tabOutlook.selectAccount(idx);
+                if (window.tabAccounts) {
+                    const acc = window.tabAccounts.outlookAccounts[idx];
+                    if (acc) {
+                        acc.user_tt = userTT || email;
+                        acc.email = email || userTT;
+                        acc.pass_tt = passTT;
+                        acc.pass_mail = passMail;
+                        window.tabAccounts.saveOutlook();
+                        window.tabAccounts.renderAccounts();
+                        if (window.tabAccounts.selectedAccount && 
+                            window.tabAccounts.selectedAccount.type === 'outlook' && 
+                            window.tabAccounts.selectedAccount.originalIndex === idx) {
+                            window.tabAccounts.selectAccount('outlook', idx);
+                        }
+                    }
+                } else if (window.tabOutlook) {
+                    window.tabOutlook.accounts[idx].user_tt = userTT || email;
+                    window.tabOutlook.accounts[idx].email = email || userTT;
+                    window.tabOutlook.accounts[idx].pass_tt = passTT;
+                    window.tabOutlook.accounts[idx].pass_mail = passMail;
+                    window.tabOutlook.saveAccounts();
+                    window.tabOutlook.renderAccounts();
+                    if (window.tabOutlook.selectedAccountIndex === idx) {
+                        window.tabOutlook.selectAccount(idx);
+                    }
                 }
                 closeEditModal();
                 showToast('Đã lưu thay đổi tài khoản Outlook!');
@@ -1077,11 +996,18 @@
 
         document.addEventListener('click', () => {
             closeAccountRowMenu();
+            const manageMenu = document.getElementById('accounts-manage-menu');
+            if (manageMenu) manageMenu.classList.add('hidden');
         });
 
-        window.addEventListener('resize', closeAccountRowMenu);
+        window.addEventListener('resize', () => {
+            closeAccountRowMenu();
+            const manageMenu = document.getElementById('accounts-manage-menu');
+            if (manageMenu) manageMenu.classList.add('hidden');
+        });
 
         document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('accounts-list')?.addEventListener('scroll', closeAccountRowMenu);
             document.getElementById('mailtm-accounts-list')?.addEventListener('scroll', closeAccountRowMenu);
             document.getElementById('outlook-accounts-list')?.addEventListener('scroll', closeAccountRowMenu);
 
@@ -1090,7 +1016,9 @@
                 if (!activeRowMenu) return;
                 const { tab, index } = activeRowMenu;
                 closeAccountRowMenu();
-                if (tab === 'mailtm' && window.tabMailtm) {
+                if (window.tabAccounts) {
+                    window.tabAccounts.openEditModal(tab, index);
+                } else if (tab === 'mailtm' && window.tabMailtm) {
                     window.tabMailtm.openEditModal(index);
                 } else if (tab === 'outlook' && window.tabOutlook) {
                     window.tabOutlook.openEditModal(index);
@@ -1102,7 +1030,9 @@
                 if (!activeRowMenu) return;
                 const { tab, index } = activeRowMenu;
                 closeAccountRowMenu();
-                if (tab === 'mailtm' && window.tabMailtm) {
+                if (window.tabAccounts) {
+                    window.tabAccounts.deleteAccount(tab, index);
+                } else if (tab === 'mailtm' && window.tabMailtm) {
                     window.tabMailtm.deleteAccount(index);
                 } else if (tab === 'outlook' && window.tabOutlook) {
                     window.tabOutlook.deleteAccount(index);
@@ -1118,6 +1048,22 @@
         </button>
         <button id="menu-btn-delete" class="w-full text-left px-3 py-1.5 text-rose-400 hover:bg-rose-500/20 hover:text-rose-300 transition font-medium border-t border-cyber-border/40">
             Xóa tài khoản
+        </button>
+    </div>
+
+    <!-- MENU TÁC VỤ QUẢN LÝ TÀI KHOẢN (GỘP THAO TÁC FILE & DANH SÁCH) -->
+    <div id="accounts-manage-menu" class="fixed bg-cyber-card border border-cyber-border rounded-lg shadow-2xl py-1 z-50 hidden text-xs min-w-[170px] backdrop-blur-md">
+        <button onclick="window.tabAccounts.openFile('mailtm'); document.getElementById('accounts-manage-menu').classList.add('hidden');" class="w-full text-left px-3 py-1.5 text-slate-200 hover:bg-blue-600/20 hover:text-blue-400 transition font-medium">
+            Nhập file Mail.tm (.txt)
+        </button>
+        <button onclick="window.tabAccounts.openFile('outlook'); document.getElementById('accounts-manage-menu').classList.add('hidden');" class="w-full text-left px-3 py-1.5 text-slate-200 hover:bg-blue-600/20 hover:text-blue-400 transition font-medium">
+            Nhập file Outlook (.txt)
+        </button>
+        <button onclick="window.tabAccounts.checkLive(); document.getElementById('accounts-manage-menu').classList.add('hidden');" class="w-full text-left px-3 py-1.5 text-emerald-400 hover:bg-emerald-500/20 hover:text-emerald-300 transition font-medium border-t border-cyber-border/40">
+            Check kháng danh sách
+        </button>
+        <button onclick="window.tabAccounts.clearAll(); document.getElementById('accounts-manage-menu').classList.add('hidden');" class="w-full text-left px-3 py-1.5 text-rose-400 hover:bg-rose-500/20 hover:text-rose-300 transition font-medium border-t border-cyber-border/40">
+            Xóa danh sách hiện tại
         </button>
     </div>
 
