@@ -38,6 +38,10 @@ class TabAccounts {
         this.htmlReader = document.getElementById('email-html-content');
         this.textReader = document.getElementById('outlook-text-content');
         this.readerEmpty = document.getElementById('mail-reader-empty');
+
+        // Browser tracking state
+        this.activeBrowserEmails = new Set();
+        this.browserStatusBadge = document.getElementById('acc-browser-status');
     }
 
     async init() {
@@ -58,6 +62,66 @@ class TabAccounts {
         const list = this.getFilteredAccounts();
         if (list.length > 0) {
             this.selectAccount(list[0].type, list[0].originalIndex);
+        }
+
+        // Bắt đầu theo dõi các phiên trình duyệt đang bật
+        this.checkActiveBrowsers();
+        setInterval(() => this.checkActiveBrowsers(), 2000);
+
+        if (window.electronAPI && window.electronAPI.onAutomationProgress) {
+            window.electronAPI.onAutomationProgress(() => {
+                this.checkActiveBrowsers();
+            });
+        }
+    }
+
+    async checkActiveBrowsers() {
+        if (!window.electronAPI || !window.electronAPI.getActiveBrowsers) return;
+        try {
+            const activeList = await window.electronAPI.getActiveBrowsers();
+            const newSet = new Set((activeList || []).map(e => (e || '').toLowerCase()));
+            let changed = newSet.size !== this.activeBrowserEmails.size;
+            if (!changed) {
+                for (const e of newSet) {
+                    if (!this.activeBrowserEmails.has(e)) {
+                        changed = true;
+                        break;
+                    }
+                }
+            }
+            if (changed) {
+                this.activeBrowserEmails = newSet;
+                this.renderAccounts();
+                this.updateBrowserStatusBadge();
+            }
+        } catch (e) {}
+    }
+
+    updateBrowserStatusBadge() {
+        if (!this.browserStatusBadge) return;
+        if (!this.selectedAccount) {
+            this.browserStatusBadge.classList.add('hidden');
+            this.browserStatusBadge.classList.remove('flex');
+            return;
+        }
+        const acc = this.selectedAccount.type === 'mailtm' 
+            ? this.mailtmAccounts[this.selectedAccount.originalIndex] 
+            : this.outlookAccounts[this.selectedAccount.originalIndex];
+        if (!acc) {
+            this.browserStatusBadge.classList.add('hidden');
+            this.browserStatusBadge.classList.remove('flex');
+            return;
+        }
+        const emailKey = (acc.email || '').toLowerCase();
+        const userKey = (acc.user_tt || '').toLowerCase();
+        const isBrowserActive = (emailKey && this.activeBrowserEmails.has(emailKey)) || 
+                                (userKey && this.activeBrowserEmails.has(userKey));
+        if (isBrowserActive) {
+            this.browserStatusBadge.classList.remove('hidden');
+            this.browserStatusBadge.classList.add('flex');
+        } else {
+            this.browserStatusBadge.classList.add('hidden');
+            this.browserStatusBadge.classList.remove('flex');
         }
     }
 
@@ -120,6 +184,19 @@ class TabAccounts {
             item.className = `px-2.5 py-1.5 rounded-md border cursor-pointer mb-1 transition-all duration-150 ${statusBg}`;
             item.onclick = () => this.selectAccount(itemObj.type, itemObj.originalIndex);
 
+            // Kiểm tra trạng thái trình duyệt đang mở
+            const emailKey = (acc.email || '').toLowerCase();
+            const userKey = (acc.user_tt || '').toLowerCase();
+            const isBrowserActive = (emailKey && this.activeBrowserEmails.has(emailKey)) || 
+                                    (userKey && this.activeBrowserEmails.has(userKey));
+
+            const browserIndicator = isBrowserActive 
+                ? `<span class="relative flex h-2.5 w-2.5 mr-1.5 flex-shrink-0 items-center justify-center inline-flex" title="Trình duyệt đang bật">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                   </span>`
+                : '';
+
             let badgeHtml = '';
             const liveVal = acc.liveCount !== undefined ? acc.liveCount : (acc.status === 'live' ? 1 : 0);
             const dieVal = acc.dieCount !== undefined ? acc.dieCount : (acc.status === 'die' ? 1 : 0);
@@ -141,10 +218,11 @@ class TabAccounts {
 
             item.innerHTML = `
                 <div class="flex items-center justify-between w-full min-w-0">
-                    <div class="truncate text-xs tracking-wide flex-1 mr-1.5 min-w-0 account-display-name">
+                    <div class="truncate text-xs tracking-wide flex-1 mr-1.5 min-w-0 flex items-center account-display-name">
+                        ${browserIndicator}
                         <span class="text-slate-400 font-mono mr-1">${displayIndex + 1}.</span>
                         ${typeTag}
-                        ${displayName}
+                        <span class="truncate">${displayName}</span>
                     </div>
                     <div class="flex items-center space-x-1 flex-shrink-0">
                         ${badgeHtml}
@@ -171,6 +249,7 @@ class TabAccounts {
         if (!acc) return;
 
         this.renderAccounts();
+        this.updateBrowserStatusBadge();
 
         // Cập nhật nhãn và giá trị thông tin
         if (type === 'mailtm') {
@@ -591,10 +670,17 @@ class TabAccounts {
         const { type, originalIndex } = this.selectedAccount;
         if (type === 'mailtm') {
             const acc = this.mailtmAccounts[originalIndex];
+            if (acc && acc.email) this.activeBrowserEmails.add(acc.email.toLowerCase());
+            this.renderAccounts();
+            this.updateBrowserStatusBadge();
             showStatus(`Bắt đầu đăng nhập TikTok Ads cho: ${acc.email}...`);
             window.electronAPI.loginTikTokAds(acc.email, acc.pass2 || acc.password, acc.password);
         } else {
             const acc = this.outlookAccounts[originalIndex];
+            if (acc && acc.email) this.activeBrowserEmails.add(acc.email.toLowerCase());
+            if (acc && acc.user_tt) this.activeBrowserEmails.add(acc.user_tt.toLowerCase());
+            this.renderAccounts();
+            this.updateBrowserStatusBadge();
             showStatus(`Mở Chrome đăng nhập cho: ${acc.email}...`);
             window.electronAPI.loginOutlookBrowser(acc.email, acc.pass_mail, acc['2fa_secret'] || '');
         }

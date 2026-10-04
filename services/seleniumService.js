@@ -50,6 +50,32 @@ class SeleniumService {
         return this.activeCaptchas.get((email || '').toLowerCase()) || null;
     }
 
+    async getActiveBrowsers() {
+        const active = [];
+        for (const [email, driver] of Array.from(this.activeDrivers.entries())) {
+            try {
+                await Promise.race([
+                    driver.getTitle(),
+                    new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 1000))
+                ]);
+                active.push(email);
+            } catch (e) {
+                if (e.message && (
+                    e.message.includes('no such session') ||
+                    e.message.includes('invalid session id') ||
+                    e.message.includes('disconnected') ||
+                    e.message.includes('not reachable') ||
+                    e.message.includes('target frame detached')
+                )) {
+                    this.activeDrivers.delete(email);
+                } else if (e.message === 'timeout') {
+                    active.push(email);
+                }
+            }
+        }
+        return active;
+    }
+
     async solveCaptchaClicks(email, clicks) {
         const driver = this.activeDrivers.get((email || '').toLowerCase());
         if (!driver) return { success: false, error: 'Không tìm thấy phiên trình duyệt đang chạy' };

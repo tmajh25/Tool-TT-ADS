@@ -88,6 +88,10 @@ ipcMain.handle('toggle-smartplus', async (event, { email, enabled }) => {
     return await seleniumService.toggleSmartPlus(email, enabled);
 });
 
+ipcMain.handle('get-active-browsers', async () => {
+    return await seleniumService.getActiveBrowsers();
+});
+
 ipcMain.on('login-outlook-browser', async (event, { email, password, secret }) => {
     const progressCallback = (msg) => {
         if (mainWindow) {
