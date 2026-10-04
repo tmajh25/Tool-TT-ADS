@@ -36,6 +36,9 @@ class SeleniumService {
         const devPath = path.join(__dirname, '..', 'extensions', 'Bypass-tiktok-smartplus-ext');
         if (fs.existsSync(devPath)) return devPath;
 
+        const downloadsExt = path.join(os.homedir(), 'Downloads', 'Bypass-tiktok-smartplus-ext');
+        if (fs.existsSync(downloadsExt)) return downloadsExt;
+
         if (process.resourcesPath) {
             const unpackedPath = path.join(process.resourcesPath, 'app.asar.unpacked', 'extensions', 'Bypass-tiktok-smartplus-ext');
             if (fs.existsSync(unpackedPath)) return unpackedPath;
