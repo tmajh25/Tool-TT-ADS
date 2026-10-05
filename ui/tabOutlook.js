@@ -289,6 +289,25 @@ class TabOutlook {
         }
     }
 
+    formatDate(dateStr) {
+        if (!dateStr) return '';
+        try {
+            const d = new Date(dateStr);
+            if (isNaN(d.getTime())) {
+                return String(dateStr).slice(0, 19).replace('T', ' ');
+            }
+            const hours = String(d.getHours()).padStart(2, '0');
+            const minutes = String(d.getMinutes()).padStart(2, '0');
+            const seconds = String(d.getSeconds()).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const year = d.getFullYear();
+            return `${hours}:${minutes}:${seconds} ${day}/${month}/${year}`;
+        } catch (e) {
+            return String(dateStr);
+        }
+    }
+
     renderInbox() {
         this.inboxListContainer.innerHTML = '';
         if (this.messages.length === 0) {
@@ -304,6 +323,7 @@ class TabOutlook {
             }
 
             const sender = msg.from ? msg.from.emailAddress.name || msg.from.emailAddress.address : 'Unknown';
+            const formattedDate = this.formatDate(msg.receivedDateTime || msg.createdAt);
             
             const item = document.createElement('div');
             item.className = `px-2.5 py-1.5 rounded-md border cursor-pointer mb-1 transition ${highlightClass}`;
@@ -311,7 +331,8 @@ class TabOutlook {
 
             item.innerHTML = `
                 <div class="flex justify-between items-center mb-1">
-                    <span class="text-[11px] font-bold text-slate-400 truncate w-3/5">${sender}</span>
+                    <span class="text-[11px] font-bold text-slate-400 truncate flex-1 mr-1.5" title="${sender}">${sender}</span>
+                    <span class="text-[9px] text-slate-500 flex-shrink-0" title="${formattedDate}">${formattedDate}</span>
                 </div>
                 <div class="text-xs font-semibold truncate text-slate-200">${msg.subject || '(Không có chủ đề)'}</div>
             `;

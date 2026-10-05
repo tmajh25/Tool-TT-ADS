@@ -366,10 +366,11 @@ class TabAccounts {
         if (!this.accessToken) return;
         try {
             const data = await window.electronAPI.fetchEmails(this.accessToken);
-            if (data && data.value) {
-                const newMessages = data.value.map(msg => ({
+            const rawList = Array.isArray(data) ? data : (data?.value || []);
+            if (rawList.length > 0 || this.messages.length > 0) {
+                const newMessages = rawList.map(msg => ({
                     id: msg.id,
-                    from: { address: msg.from?.emailAddress?.address || 'Chưa rõ' },
+                    from: { address: msg.from?.emailAddress?.address || msg.from?.emailAddress?.name || 'Chưa rõ' },
                     subject: msg.subject || '(Không có tiêu đề)',
                     createdAt: msg.receivedDateTime,
                     body: msg.body?.content || ''
@@ -380,6 +381,25 @@ class TabAccounts {
                 }
             }
         } catch (e) {}
+    }
+
+    formatDate(dateStr) {
+        if (!dateStr) return '';
+        try {
+            const d = new Date(dateStr);
+            if (isNaN(d.getTime())) {
+                return String(dateStr).slice(0, 19).replace('T', ' ');
+            }
+            const hours = String(d.getHours()).padStart(2, '0');
+            const minutes = String(d.getMinutes()).padStart(2, '0');
+            const seconds = String(d.getSeconds()).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const year = d.getFullYear();
+            return `${hours}:${minutes}:${seconds} ${day}/${month}/${year}`;
+        } catch (e) {
+            return String(dateStr);
+        }
     }
 
     renderInbox() {
@@ -404,7 +424,7 @@ class TabAccounts {
                 }
             }
 
-            const formattedDate = msg.createdAt ? msg.createdAt.slice(0, 19).replace('T', ' ') : '';
+            const formattedDate = this.formatDate(msg.createdAt);
             const fromAddr = msg.from ? (msg.from.address || 'Chưa rõ') : 'Chưa rõ';
 
             const item = document.createElement('div');
@@ -413,8 +433,8 @@ class TabAccounts {
 
             item.innerHTML = `
                 <div class="flex justify-between items-center mb-1">
-                    <span class="text-[11px] font-bold text-slate-400 truncate w-3/5">${fromAddr}</span>
-                    <span class="text-[9px] text-slate-500">${formattedDate}</span>
+                    <span class="text-[11px] font-bold text-slate-400 truncate flex-1 mr-1.5" title="${fromAddr}">${fromAddr}</span>
+                    <span class="text-[9px] text-slate-500 flex-shrink-0" title="${formattedDate}">${formattedDate}</span>
                 </div>
                 <div class="text-xs font-semibold truncate text-slate-200">${msg.subject}</div>
             `;

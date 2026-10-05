@@ -36,7 +36,7 @@ class OutlookService {
                 params: {
                     $top: 10,
                     $orderby: 'receivedDateTime desc',
-                    $select: 'id,subject,from,body'
+                    $select: 'id,subject,from,body,receivedDateTime'
                 },
                 timeout: 15000
             });
